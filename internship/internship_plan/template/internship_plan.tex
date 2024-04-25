@@ -1,0 +1,508 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage{setspace}
+\usepackage[usenames,x11names]{xcolor}
+% \usepackage{cmbright}
+\usepackage{mathptmx}
+\usepackage{amsmath}
+\usepackage{amstext}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[footnotesize,bf,labelsep=space]{caption}
+\usepackage{csquotes}
+\usepackage{esvect}
+\usepackage{enumitem}
+\usepackage{eurosym}
+\usepackage{exscale}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{mathrsfs}
+\usepackage[version=3]{mhchem}
+\usepackage{multirow}
+\usepackage{placeins}
+\usepackage{rotating}
+\usepackage{siunitx}
+\usepackage{eurosym}
+\usepackage{subfig}
+\usepackage[overlay]{textpos}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\usepackage{wrapfig}
+\usepackage{color, colortbl} 
+% \usepackage[colorlinks,allcolors=black]{hyperref}
+\usepackage{afterpage}
+\usepackage{upgreek}
+\usepackage{ulem}
+\usepackage[hang,flushmargin]{footmisc}
+
+\usepackage{bibentry}
+\bibliographystyle{alpha}
+\nobibliography*
+
+  
+
+\usepackage[yyyymmdd]{datetime}
+\renewcommand{\dateseparator}{-}
+
+\renewcommand{\baselinestretch}{1.0}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{filecontents}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{varwidth}
+\usepackage{adjustbox}
+\usetikzlibrary{patterns.meta}
+\usepackage{pgfgantt}
+
+\usetikzlibrary{calc}
+\tikzset{math3d/.style={z={(-0.65cm,-0.30cm)},y={(0cm,1cm)},x={(0.9cm,-0.15cm)}}}
+\usetikzlibrary{shapes.geometric, arrows, intersections, through}
+\usetikzlibrary{decorations.text, decorations.shapes, backgrounds}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{colorbrewer}
+\usetikzlibrary{patterns}
+\usepgfplotslibrary{colorbrewer}
+\usepgfplotslibrary{colormaps}
+
+
+\definecolor{color1}{HTML}{B3E2CD}
+\definecolor{color2}{HTML}{FDCDAC}
+\definecolor{color3}{HTML}{CBD5E8}
+\definecolor{color4}{HTML}{F4CAE4}
+\definecolor{color5}{HTML}{E6F5C9}
+
+
+\newcommand\pgfmathsinandcos[3]{%
+  \pgfmathsetmacro#1{sin(#3)}%
+  \pgfmathsetmacro#2{cos(#3)}%
+}
+\newcommand\LongitudePlane[3][current plane]{%
+  \pgfmathsinandcos\sinEl\cosEl{#2} % elevation
+  \pgfmathsinandcos\sint\cost{#3} % azimuth
+  \tikzset{#1/.style={cm={\cost,\sint*\sinEl,0,\cosEl,(0,0)}}}
+}
+\newcommand\LatitudePlane[3][current plane]{%
+  \pgfmathsinandcos\sinEl\cosEl{#2} % elevation
+  \pgfmathsinandcos\sint\cost{#3} % latitude
+  \pgfmathsetmacro\yshift{\cosEl*\sint}
+  \tikzset{#1/.style={cm={\cost,0,0,\cost*\sinEl,(0,\yshift)}}} %
+}
+\newcommand\DrawLongitudeCircle[2][1]{
+  \LongitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+   % angle of "visibility"
+  \pgfmathsetmacro\angVis{atan(sin(#2)*cos(\angEl)/sin(\angEl))} %
+  \draw[current plane,very thin,solid] (\angVis:1) arc (\angVis:\angVis+180:1);
+  \draw[current plane,very thin,dashed] (\angVis-180:1) arc (\angVis-180:\angVis:1);
+}%this is fake: for drawing the grid
+\newcommand\DrawLongitudeCirclered[2][1]{
+  \LongitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+   % angle of "visibility"
+  \pgfmathsetmacro\angVis{atan(sin(#2)*cos(\angEl)/sin(\angEl))} %
+  \draw[current plane] (150:1) arc (150:180:1);
+  %\draw[current plane,dashed] (-50:1) arc (-50:-35:1);
+}%for drawing the grid
+\newcommand\DLongredd[2][1]{
+  \LongitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+   % angle of "visibility"
+  \pgfmathsetmacro\angVis{atan(sin(#2)*cos(\angEl)/sin(\angEl))} %
+  \draw[current plane,black,dashed, ultra thick] (150:1) arc (150:180:1);
+}
+\newcommand\DLatred[2][1]{
+  \LatitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+  \pgfmathsetmacro\sinVis{sin(#2)/cos(#2)*sin(\angEl)/cos(\angEl)}
+  % angle of "visibility"
+  \pgfmathsetmacro\angVis{asin(min(1,max(\sinVis,-1)))}
+  \draw[current plane,dashed,black,ultra thick] (-50:1) arc (-50:-35:1);
+
+}
+\newcommand\fillred[2][1]{
+  \LongitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+   % angle of "visibility"
+  \pgfmathsetmacro\angVis{atan(sin(#2)*cos(\angEl)/sin(\angEl))} %
+  \draw[current plane,red,thin] (\angVis:1) arc (\angVis:\angVis+180:1);
+
+}
+
+\newcommand\DrawLatitudeCircle[2][1]{
+  \LatitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+  \pgfmathsetmacro\sinVis{sin(#2)/cos(#2)*sin(\angEl)/cos(\angEl)}
+  % angle of "visibility"
+  \pgfmathsetmacro\angVis{asin(min(1,max(\sinVis,-1)))}
+  \draw[current plane,very thin,solid] (\angVis:1) arc (\angVis:-\angVis-180:1);
+  \draw[current plane,very thin,dashed] (180-\angVis:1) arc (180-\angVis:\angVis:1);
+}%Defining functions to draw limited latitude circles (for the red mesh)
+
+\newcommand\DrawLatitudeCirclered[2][1]{
+  \LatitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+  \pgfmathsetmacro\sinVis{sin(#2)/cos(#2)*sin(\angEl)/cos(\angEl)}
+  % angle of "visibility"
+  \pgfmathsetmacro\angVis{asin(min(1,max(\sinVis,-1)))}
+  %\draw[current plane,red,thick] (-\angVis-50:1) arc (-\angVis-50:-\angVis-20:1);
+\draw[current plane] (-50:1) arc (-50:-35:1);
+}
+
+
+\newcommand\DrawLatitudeCircleredCoord[4][1]{
+  \LatitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+  \pgfmathsetmacro\sinVis{sin(#2)/cos(#2)*sin(\angEl)/cos(\angEl)}
+  % angle of "visibility"
+  \pgfmathsetmacro\angVis{asin(min(1,max(\sinVis,-1)))}
+  %\draw[current plane,red,thick] (-\angVis-50:1) arc (-\angVis-50:-\angVis-20:1);
+\draw[current plane, thick] (-50:1) coordinate (#3) arc (-50:-35:1) coordinate (#4);
+}
+
+\newcommand\DrawLongitudeCircleredCoord[4][1]{
+  \LongitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+   % angle of "visibility"
+  \pgfmathsetmacro\angVis{atan(sin(#2)*cos(\angEl)/sin(\angEl))} %
+  \draw[current plane] (150:1) coordinate (#3) arc (150:180:1) coordinate (#4);
+  %\draw[current plane,dashed] (-50:1) arc (-50:-35:1);
+}%for drawing the grid
+
+\tikzset{%
+  >=latex,
+  inner sep=0pt,%
+  outer sep=2pt,%
+  mark coordinate/.style={inner sep=0pt,outer sep=0pt,minimum size=3pt,
+    fill=black,circle}%
+}
+
+
+
+\setcounter{topnumber}{1}
+\setcounter{bottomnumber}{0}
+\setcounter{totalnumber}{2}
+\setcounter{secnumdepth}{2}
+
+\setlength{\skip\footins}{16pt}
+
+% COLUMN TYPES
+
+\newcolumntype{x}{>{\small}c}
+\newcolumntype{y}{>{\small}l}
+\newcolumntype{z}{>{\small}r}
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+% LENGTH VARIABLES
+
+\newcommand*{\tablewidth}{215mm} \newcommand*{\figurefactor}{0.8}
+\newcommand*{\subfigurefactor}{0.425}
+\newcommand{\comment}[1]{\textcolor{blue}{(#1)}}
+
+% NUMBERING EQUATIONS AND FIGURES
+
+\renewcommand{\theequation}{\arabic{equation}}
+%\renewcommand{\theequation}{\thesection.\arabic{equation}}
+%\numberwithin{equation}{section}
+\renewcommand{\thefigure}{\arabic{figure}}
+%\renewcommand{\thefigure}{\thesection.\arabic{figure}}
+%\numberwithin{figure}{section}
+\renewcommand{\thetable}{\arabic{table}}
+%\renewcommand{\thetable}{\thesection.\arabic{table}}
+%\numberwithin{table}{section}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\newcommand{\D}{\displaystyle}
+\newcommand{\T}{\textstyle}
+
+\renewcommand{\thefootnote}{\arabic{footnote}}
+
+% TEXT LAYOUT (Letter = 216mm x 279mm)
+\usepackage[letterpaper]{geometry}
+\setlength{\headsep}{0.3cm}
+\setlength{\headheight}{1cm}
+\geometry{textwidth=176.5mm, textheight=239.5mm}
+\renewcommand{\headrulewidth}{0pt}
+
+%% TODO options
+\usepackage{xargs}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+
+
+
+\definecolor{darkgreen}{rgb}{0.0, 0.2, 0.13}
+\usepackage[framemethod=TikZ]{mdframed}
+\newcounter{theo}[section]\setcounter{theo}{0}
+\renewcommand{\thetheo}{\arabic{chapter}.\arabic{theo}}
+
+\newcounter{publications}[section]\setcounter{publications}{0}
+\renewcommand{\thetheo}{\arabic{chapter}.\arabic{publications}}
+\newenvironment{publications}[2][0]{%
+    \refstepcounter{publications}
+    % Code for box design goes here.
+    \ifstrempty{#1}%
+    % if condition (without title)
+    {\mdfsetup{%
+        frametitle={%\ ~
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[rounded corners=2pt,anchor=east,rectangle,fill=darkgreen!65]
+            {\strut \small \ \color{white}{Related publications\ ~}};}
+        }%
+    % else condition (with title)
+    }{\mdfsetup{%
+        frametitle={%
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[rounded corners=2pt,anchor=east,rectangle,fill=darkgreen!65]
+            {\strut \small \ \color{white}{Third-party funding:~#1\ ~}};}%
+        }%
+    }%
+    % Both conditions
+    \mdfsetup{%
+        innertopmargin=0pt,linecolor=darkgreen!65,%
+        linewidth=1pt,topline=true,%
+        roundcorner=3pt,frametitleaboveskip=\dimexpr-\ht\strutbox\relax%
+    }
+\begin{mdframed}[backgroundcolor=darkgreen!5]\relax\sloppy\small}{%
+\end{mdframed}}
+
+\setlength{\belowcaptionskip}{-10pt}
+
+\newgantttimeslotformat{stardate}{% \def\decomposestardate##1.##2\relax{%
+\def\stardateyear{##1}\def\stardateday{##2}% }% \decomposestardate#1\relax%
+\pgfcalendardatetojulian{\stardateyear-01-01}{#2}% \advance#2 by-1\relax%
+\advance#2 by\stardateday\relax%
+}
+
+
+\newganttlinktype{rdldr*}{%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xLeft + \ganttvalueof{link bulge 1} * \ganttvalueof{x unit},
+      \yUpper) --
+    ($(\xLeft + \ganttvalueof{link bulge 1} * \ganttvalueof{x unit},
+      \yUpper)!%
+      \ganttvalueof{link mid}!%
+      (\xLeft + \ganttvalueof{link bulge 1} * \ganttvalueof{x unit},
+      \yLower)$) --
+    ($(\xRight - \ganttvalueof{link bulge 2} * \ganttvalueof{x unit},
+      \yUpper)!%
+      \ganttvalueof{link mid}!%
+      (\xRight - \ganttvalueof{link bulge 2} * \ganttvalueof{x unit},
+      \yLower)$) --
+    (\xRight - \ganttvalueof{link bulge 2} * \ganttvalueof{x unit},
+      \yLower) --
+    (\xRight, \yLower);%
+}
+\ganttset{
+  link bulge 1/.link=/pgfgantt/link bulge,
+  link bulge 2/.link=/pgfgantt/link bulge}
+  
+\hyphenation{in-com-press-ible}
+\hyphenation{com-press-ible}
+
+\newcommand{\link}[3][blue]{\hyperlink{#2}{\color{#1}{#3}}}%
+
+% \numberwithin{page}{section}
+% \renewcommand{\thepage}{\thesection-\arabic{page}}
+\usepackage{titlesec}
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+
+
+\fancypagestyle{firststyle}
+{
+   \fancyhf{}
+   \fancyfoot[C]{\thepage}
+   \renewcommand{\headrulewidth}{0pt} % removes horizontal header line
+}
+\fancyhead[l]{}
+\fancyhead[r]{Internship project description: \textbf{Student name} \hfill Written by: \textbf{Supervisor name}}
+\setlength{\parindent}{10pt}
+
+\DeclareTextFontCommand{\emph}{\it}
+
+\makeatletter
+\renewcommand{\fnum@figure}{Fig.~\thefigure}
+\makeatother
+\newcommand\Dganttbar[4]{%
+  \ganttbar{#1}{#3}{#4}\ganttbar[inline,bar label font=\footnotesize]{#2}{#3}{#4}
+}
+
+
+\makeatletter
+\DeclareRobustCommand\em
+  {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+     \eminnershape \else \slshape \fi}%
+\makeatother
+
+
+
+\usepackage{array}
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+
+\begin{document}
+\pagestyle{fancy}
+
+
+\section{Context}
+
+In a maximum of one page, write the context of the project. What is the history behind the project? Who is playing a role within this project? Why is this project relevant? What is the timeframe of the entire project?
+
+The goal of this context is to show to the intern that their project is part of a bigger project and that their individual contribution will have an impact on multiple individual as part of a bigger thing.
+
+
+\section{Research objectives}
+
+\textbf{General Objective:} Formulate the general objective of the internship
+
+\begin{enumerate}
+  \item Specific objective 1
+  \item Specitic objective 2
+  \item Specific objective 3
+\end{enumerate}
+
+The specific objectives should be related to the deliverables of the project. There are no indications on the number of specific objectives you should have for your intern, but it is relevant to include between 2 and 5 specific objectives. 
+
+
+\section{Relevant scientific litterature}
+
+When starting a project, it is wise to begin by dedicating a part of the workload to reading and to establishing a short litterature review on the topic of interest. A good idea is to provide a few key references that will be helpful during the project. Try to limit the amount of references to a few so as not to drown the student in ressources. You can also group there references by sub-topic.  
+
+\begin{itemize}
+  \item  \bibentry{blais2020lethe} 
+  \item  \bibentry{el2023toward}
+\end{itemize}
+
+
+\section{Onboarding documents}
+
+Interns will often need to learn about a large variety of topics. For example, they might be unfamiliar with the use of a Linux terminal, or a certain experimental method. Although these topics are more technical in nature, it is a good idea to provide a list of references to help interns acquire this knowledge. These don't need to be scientific references, but can be website for example. The best idea is to group these notions as part of a table or a similar construct.
+
+
+\begin{center}
+  \begin{table}[h]
+\caption{Resources to learn how to program in C++} 
+\centering
+\begin{tabular}{p{3cm}|p{9cm}|c}
+ Topic & References & Section or pages \\
+ \hline
+ \hline
+ General C++ programming  & & All\\
+ \hline
+ C++ 14 and 17 &  & All\\
+ \hline
+ Design patterns & \bibentry{gamma1995elements}   & All\\
+\end{tabular}
+\end{table}
+\end{center}
+
+\section{Gantt Chart}
+
+Although we generally all hate Gantt chart, they provide a valuable information to the intern as to the temporal organization of the internship. Writing an initial Gantt chart of the project, including a critical path, is a good way to help the intern plan their internship ahead of time and to anticipate challenges or bottlenecks.
+
+\begin{figure}[h]
+
+  \begin{ganttchart}[
+  group label node/.append style={align=left,text width=5em},
+  bar label node/.append style={align=left,text width=5em},
+  milestone label node/.append style={align=left,text width=5em},
+  Mile1/.style={milestone/.append style={fill=black,align=left,text width=0.6em}},
+  x unit=3.2mm,y unit chart=3.8mm,y unit title=4.3mm,vgrid={draw=none,dotted}, title height=1, bar height=.7, group height=0.4,
+  ]{1}{42}
+    \gantttitle{Week 2}{6} 
+    \gantttitle{Week 4}{6}
+    \gantttitle{Week 6}{6} 
+    \gantttitle{Week 8}{6}
+    \gantttitle{Week 10}{6}
+    \gantttitle{Week 12}{6}
+    \gantttitle{Week 14}{6}\\ 
+    \ganttgroup{\footnotesize Work item 1}{1}{38}\\
+    \ganttset{bar/.append style={fill=color1}}
+    \Dganttbar{\footnotesize Element 1}{\scriptsize {}}{1}{12}\\ 
+    \ganttbar{\footnotesize Element 2}{12}{24}\\ 
+    \ganttbar{\footnotesize Element 3}{24}{36}\\
+    \ganttbar{\footnotesize Element 4}{10}{20} % trajectories
+    \ganttset{bar/.append style={fill=SkyBlue2}}
+    \Dganttbar{}{}{20}{30}\\
+    \ganttset{bar/.append style={fill=Goldenrod1}}
+    \ganttmilestone[Mile1]{\footnotesize Deliverable}{36} \\
+
+    \ganttgroup{\footnotesize WP 2}{3}{24} \\
+    \ganttset{bar/.append style={fill=color2}}
+    \Dganttbar{\footnotesize Element 1}{}{3}{6}\\
+    \Dganttbar{\footnotesize Element 2}{}{6}{20}\\
+    \ganttmilestone[Mile1]{\footnotesize Deliverable}{20} \\
+
+
+    \ganttgroup{\footnotesize WP 3}{3}{24} \\
+    \ganttset{bar/.append style={fill=color3}}
+    \Dganttbar{\footnotesize Element 1}{}{12}{30}\\
+    \Dganttbar{\footnotesize Element 2}{}{14}{24}\\
+    \ganttmilestone[Mile1]{\footnotesize Deliverable}{30} \\
+
+    \ganttgroup{\footnotesize WP 3}{3}{24} \\
+    \ganttset{bar/.append style={fill=color4}}
+    \Dganttbar{\footnotesize Element 1}{}{3}{6}\\
+    \Dganttbar{\footnotesize Element 2}{}{6}{12}\\
+    \ganttmilestone[Mile1]{\footnotesize Deliverable}{20} \\
+
+    \ganttlink[link/.style={-stealth,semithick,densely dashed}, link type=rdldr*,link bulge 1=0.5, link bulge 2=0.5,link mid=.937]{elem10}{elem4}
+    \ganttlink[link/.style={-stealth,semithick,densely dashed}, link type=rdldr*,link bulge 1=0.5, link bulge 2=0.5,link mid=.937]{elem24}{elem19}
+    \ganttlink[link/.style={-stealth,thick,densely dotted}, link type=rdldr*,link bulge 1=0.5, link bulge 2=0.5,link mid=.95]{elem23}{elem17}
+  \end{ganttchart}
+  \caption{\setstretch{0.95}Work plan of the internship
+    \vspace{-0.7em}}
+    \label{fig:gantt}
+    \end{figure}
+
+\section{Budget}
+
+Experimental material/or component can incur significant cost to a project. Although money is often a taboo topic in academia, it is important to be transparent to interns regarding the cost of the components and consumables they will be using within their project. This also helps with careful planning of the project to ensure that the cost of the internship does not become unreasonable. This may not be necessary for every project, but it is a good exercise to try to write a budget nonetheless.
+
+
+\section{Workplace conduct}
+
+This is another topic which is not often discussed, but which is highly important to include and to discuss explicitely. The following information should be provided:
+
+\begin{itemize}
+  \item \textbf{Number of working hours per week - 35: } The number of working hours are given as an indication and should not be enforced drastically. The idea here is to provide you with guidance on the amount of work that is expected.
+  \item \textbf{Core working hours - 9:00/15:00: } Core working hours are the hours within the day that the intern should be present for meetings and/or discussion with the supervisor. The idea is to have core working hours which are less than the amount of expected working hours to leave some freedom to the student.
+  \item \textbf{Mandatory meetings: } If you research group has group meetings (weekly, etc.), this should be discussed here.
+\end{itemize}
+
+
+
+\begin{center}
+  \begin{table}[h]
+\caption{Budget of the internship} \label{budget}
+
+\centering
+\begin{tabular}{c|R{4.2em}R{4.2em}|R{4.5em}}
+ Item & \centering Estimated amount & \centering Unit cost   & \multicolumn{1}{c}{Total} \\
+ \hline
+ Item 1 & \$ $1\,500$\phantom{)} & \$ 1 & \$ $1\,500$\phantom{)}\\
+ Item 2 & \$ $2\,500$\phantom{)} & \$ 1 & \$ $2\,500$\phantom{)}\\
+ Item 3 & \$ $3\,500$\phantom{)} & \$ 1 & \$ $3\,500$\phantom{)}\\
+ Item 4 & \$ $4\,500$\phantom{)} & \$ 1 & \$ $4\,500$\phantom{)}\\
+ \hline
+Total  & - & - &$11\,500$\phantom{)}
+\end{tabular}
+\end{table}
+\end{center}
+
+
+\section{References}
+This section is your bibliography
+
+
+\bibliography{references.bib}
+
+
+\end{document}
