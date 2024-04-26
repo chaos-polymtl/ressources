@@ -1,0 +1,326 @@
+\documentclass[t, 11pt,xcolor=dvipsnames]{beamer}
+
+%Insert number of slides
+\beamertemplatenavigationsymbolsempty
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+% Redefine itemize
+\def\labelitemi{--}
+
+
+%Define colors useful for presentation
+\definecolor{UniBlue}{RGB}{0,102,204}
+\definecolor{UniOrange}{RGB}{255,128,0}
+\definecolor{mygreen}{RGB}{120,190,33}
+\newcommand{\green}[1]{\textcolor{ForestGreen}{#1}}
+
+%\definecolor{color1}{HTML}{B3E2CD}
+%\definecolor{color2}{HTML}{FDCDAC}
+%\definecolor{color3}{HTML}{CBD5E8}
+%\definecolor{color4}{HTML}{F4CAE4}
+%\definecolor{color5}{HTML}{E6F5C9}
+
+%\definecolor{color1}{HTML}{66C2A5}
+%\definecolor{color2}{HTML}{FC8D62}
+%\definecolor{color3}{HTML}{8DA0CB}
+%\definecolor{color4}{HTML}{E78AC3}
+%\definecolor{color5}{HTML}{A6D854}
+
+\definecolor{color1}{HTML}{1B9E77}
+\definecolor{color2}{HTML}{D95F02}
+\definecolor{color3}{HTML}{7570B3}
+\definecolor{color4}{HTML}{E7298A}
+\definecolor{color5}{HTML}{66A61E}
+
+
+\setbeamercolor{title}{fg=color1}
+\setbeamercolor{frametitle}{fg=color1}
+\setbeamercolor{structure}{fg=color3}
+\setbeamercolor{footline}{fg=black}
+\setbeamercolor{caption name}{fg=black}
+\setbeamercolor{bibliography item}{fg=black}
+\setbeamercolor*{bibliography entry title}{fg=black}
+\setbeamercolor*{bibliography entry author}{fg=black}
+\setbeamercolor*{bibliography entry location}{fg=black}
+\setbeamercolor*{bibliography entry note}{fg=black}
+
+
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+
+%Additional packages
+\usepackage{blkarray}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{algorithm2e}
+\usepackage{appendixnumberbeamer}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots,dateplot}
+\usetikzlibrary{patterns,shapes.arrows}
+\pgfplotsset{compat=newest}
+\usepackage{multimedia}
+\usepackage{media9}
+\usepackage{pbox}
+\usepackage{multirow}
+\usepackage[makeroom]{cancel}
+\usepackage[export]{adjustbox}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{tikz,pgfplotstable,filecontents}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{algorithmic}
+
+
+%Shading text: useful to highlight information
+\usepackage{framed, color}
+\definecolor{shadecolor}{RGB}{220,220,220}
+\usepackage{makecell}
+
+\usepackage{subcaption}
+%Define logos for subojectives
+% \newcommand{\logoso1}{\setbeamertemplate{logo}{\includegraphics[width=0.1\textwidth]{images/so1.png}}
+\def\mathunderline#1#2{\color{#1}\underline{{\color{black}#2}}\color{black}}
+
+
+\usepackage{siunitx}
+
+% Add an outline slide at the beginning of each new section
+\AtBeginSection[]
+{
+	{
+		\setbeamertemplate{footline}{} %this line removes slides numbers
+		\begin{frame}[noframenumbering]
+			\frametitle{Outline}
+			\tableofcontents[currentsection]
+		\end{frame}
+	}
+}
+
+\title{\textbf{Supervising internships}}
+\subtitle{Let's talk about it}
+\author{Bruno \textit{problembär} Blais}
+
+
+\begin{document}
+    %% Title slide
+\begin{frame}
+\vspace{0.5cm}
+	\begin{figure}
+  		\includegraphics[scale = 0.12]{images/logo_lethe.png}\hspace*{0.2cm}
+  		\includegraphics[scale = 0.4]{images/logo-poly.jpg}
+	\end{figure}
+	\titlepage
+\end{frame}
+
+%%Contents slide
+\begin{frame}
+	\frametitle{\textbf{Outline}}
+	\tableofcontents
+\end{frame}
+
+%% Other slides
+\section{Motivation behind this small training session}
+
+\begin{frame} {Motivation}
+
+	\visible<1->{
+			\textbf{Internships are hit or miss}
+			\vspace{1em}
+
+			\textbf{\color{color2} Hit}
+			\begin{itemize}
+				\item Learning experience for students and for you
+				\item Significantly advance your project
+				\item Test different hypothesis
+			\end{itemize}
+
+			\textbf{\color{color3} Miss}
+			\begin{itemize}
+				\item Impression of time wasted
+				\item Inadequate or non-reusable results
+				\item Frustrations (on both sides)
+			\end{itemize}
+	}
+
+	\visible<2->{
+	\begin{shaded}
+		\begin{itemize}
+		\item \textbf{Good experience to share?}
+		\item \textbf{Bad experience to share?}
+		\end{itemize}
+	\end{shaded}
+
+	}
+
+\end{frame}
+
+\begin{frame} {This seminar}
+\begin{block}{Slides}
+	The LaTeX sources for the slides for this seminar are freely available on Github in the following public repository \url{https://github.com/lethe-cfd/ressources}	
+\end{block}
+
+\begin{block}{Internship}
+One of the main element of this training is the focus on designing an internship plan. We will discuss an example of such plan later, but a template and an example are available on the Github repository.
+\end{block}
+
+\begin{block}{License}
+The entire content of this training session is available under an MIT license. Feel free to reuse and adapt.
+\end{block}
+
+\end{frame}
+
+
+
+
+
+\section{Planning the internship}
+
+\begin{frame}[fragile]{Why?}
+
+	Key steps to success. Plan and anticipate challenges. Internships are short, make the best use of your time.
+	
+	\begin{block}{Key elements}
+		\begin{itemize}
+		\item When?
+		\item Where?
+		\item What?
+		\item Communication
+		\item Work ethics
+		\item Time organization
+		\item Budget
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}{When?}
+
+	\begin{block}{Duration}
+		Internships last between 8 weeks and 16 weeks.  Longer internships generally lead to better results, but they require more planning. 
+	\end{block}
+
+	\visible<2->
+	{
+	\begin{block}{Working schedule}
+		\begin{itemize}
+			\item What is your work schedule? 
+			\item What do you expect will be the work schedule of your intern?
+			\item How many hours per week do you expect them to work?
+		\end{itemize}
+	\end{block}
+	}
+
+	\visible<3->
+	{
+	\begin{block}{To consider}
+		\begin{itemize}
+			\item Will you be taking vacations? 
+			\item Will you be going on conferences? 
+		\end{itemize}
+	\end{block}
+	}
+
+	\visible<4->{
+		\begin{shaded}
+			\textbf{Anecdote}
+		\end{shaded}
+		}
+
+\end{frame}
+
+\begin{frame}{Where?}
+
+	\visible<1->{
+		\begin{shaded}
+			\textbf{Another anecdote}
+		\end{shaded}
+		}
+
+		\visible<2->
+		{
+	\textbf{Fun fact:} Your intern needs a desk. 
+	
+	\begin{itemize}
+		\item Where should that desk be located?  \begin{itemize} \item Close? \item Far? \end{itemize}
+		\item Is there a desk available? 
+		\item Is the room where the desk is located locked?
+	\end{itemize}
+	}
+
+	\visible<3->
+	{
+		\textbf{Fun fact:} Your intern may need access to a laboratory.
+		\begin{itemize}
+			\item What type of training do they need?
+			\item Do they need a key? 
+		\end{itemize}
+	}
+	
+\end{frame}
+
+\begin{frame}{What?}
+	\visible<1->{
+		\begin{shaded}
+			\textbf{Describe to me what type of work you would like to give your intern}
+		\end{shaded}
+		}
+
+	\visible<2->
+	{
+		I like to divide internships into three categories
+		\begin{itemize}
+			\item Companion
+			\item Parallel work
+			\item Orthogonal work
+		\end{itemize}
+	}
+
+\end{frame}
+
+\begin{frame}{Companion}
+
+	\begin{block}{Description}
+		Inernship where the intern closely collaborates with you and works with you on a daily basis.
+	\end{block}
+
+	\textbf{Examples}
+	\begin{itemize}
+		\item Assemble an experimental setup with your intern
+		\item Collect data with your intern 
+		\item Write a software with your intern (either co-coding or splitting small routines)
+	\end{itemize}
+
+\end{frame}
+
+
+
+\section{Supervising the internship}
+
+\section{Following through}
+
+	
+%\begin{framed}
+%	Find a scalar $T$ in $\Omega \rightarrow \mathbb{R}$ satisfying:
+%	\begin{align*}
+%			-\partial_j \partial_j T =& 10 \ \textrm{ in } \Omega\\
+%			 T =& 0 \ \textrm{ in } \Gamma
+%	\end{align*}
+%	\end{framed}
+%
+%	\visible<1->{
+%		\begin{shaded}
+%			\textbf{Goal of all iterative methods}
+%			\begin{itemize}
+%			\item Goal is to annhilate some components of teh residual vector $r=b-\mathcal{A}x$
+%			\item We will try to find a solution for $x$ that satisfies $\lVert x \rVert < \mathrm{tol}$
+%			\end{itemize}
+%	\end{shaded}}
+\end{document}
