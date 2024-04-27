@@ -37,6 +37,9 @@
 \usepackage{ulem}
 \usepackage[hang,flushmargin]{footmisc}
 
+\newlist{todolist}{itemize}{2}
+\setlist[todolist]{label=$\square$}
+
 \usepackage{bibentry}
 \bibliographystyle{alpha}
 \nobibliography*
@@ -497,6 +500,17 @@ Total  & - & - &$11\,500$\phantom{)}
 \end{table}
 \end{center}
 
+\section{Checklist}
+
+\begin{todolist}
+  \item Office key
+  \item Access to laboratory
+  \item Access to network
+  \item Visit of the university
+  \item Knows where the secretary office is 
+  \item Computer is ready 
+  \item ...
+\end{todolist}
 
 \section{References}
 This section is your bibliography
