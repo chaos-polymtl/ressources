@@ -79,6 +79,51 @@
 \usepackage{enumitem}
 \usepackage{algorithmic}
 
+%GANTT Stuff
+\usepackage{pgfgantt}
+\newgantttimeslotformat{stardate}{% \def\decomposestardate##1.##2\relax{%
+\def\stardateyear{##1}\def\stardateday{##2}% }% \decomposestardate#1\relax%
+\pgfcalendardatetojulian{\stardateyear-01-01}{#2}% \advance#2 by-1\relax%
+\advance#2 by\stardateday\relax%
+}
+
+
+\newganttlinktype{rdldr*}{%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xLeft + \ganttvalueof{link bulge 1} * \ganttvalueof{x unit},
+      \yUpper) --
+    ($(\xLeft + \ganttvalueof{link bulge 1} * \ganttvalueof{x unit},
+      \yUpper)!%
+      \ganttvalueof{link mid}!%
+      (\xLeft + \ganttvalueof{link bulge 1} * \ganttvalueof{x unit},
+      \yLower)$) --
+    ($(\xRight - \ganttvalueof{link bulge 2} * \ganttvalueof{x unit},
+      \yUpper)!%
+      \ganttvalueof{link mid}!%
+      (\xRight - \ganttvalueof{link bulge 2} * \ganttvalueof{x unit},
+      \yLower)$) --
+    (\xRight - \ganttvalueof{link bulge 2} * \ganttvalueof{x unit},
+      \yLower) --
+    (\xRight, \yLower);%
+}
+\ganttset{
+  link bulge 1/.link=/pgfgantt/link bulge,
+  link bulge 2/.link=/pgfgantt/link bulge}
+  
+\hyphenation{in-com-press-ible}
+\hyphenation{com-press-ible}
+
+\newcommand{\link}[3][blue]{\hyperlink{#2}{\color{#1}{#3}}}%
+
+
+
+\newcommand\Dganttbar[4]{%
+  \ganttbar{#1}{#3}{#4}\ganttbar[inline,bar label font=\footnotesize]{#2}{#3}{#4}
+}
+% End of GANTT stuff
+
+
 
 %Shading text: useful to highlight information
 \usepackage{framed, color}
@@ -186,20 +231,22 @@ The entire content of this training session is available under an MIT license. F
 
 \begin{frame}[fragile]{Why?}
 
-	Key steps to success. Plan and anticipate challenges. Internships are short, make the best use of your time.
+	Key steps to success. Plan and anticipate challenges. Internships are short, make the best use of everyone's time.
 	
 	\begin{block}{Key elements}
 		\begin{itemize}
 		\item When?
 		\item Where?
 		\item What?
+		\item Who?
 		\item Communication
-		\item Work ethics
 		\item Time organization
 		\item Budget
 		\end{itemize}
 	\end{block}
 \end{frame}
+
+
 
 \begin{frame}{When?}
 
@@ -215,6 +262,7 @@ The entire content of this training session is available under an MIT license. F
 			\item What do you expect will be the work schedule of your intern?
 			\item How many hours per week do you expect them to work?
 		\end{itemize}
+		\textbf{Be explicit. Establish these requirements in written form.}
 	\end{block}
 	}
 
@@ -288,39 +336,272 @@ The entire content of this training session is available under an MIT license. F
 \begin{frame}{Companion}
 
 	\begin{block}{Description}
-		Inernship where the intern closely collaborates with you and works with you on a daily basis.
+		Internship where the intern closely collaborates with you and works with you on a daily basis.
 	\end{block}
 
 	\textbf{Examples}
 	\begin{itemize}
 		\item Assemble an experimental setup with your intern
 		\item Collect data with your intern 
-		\item Write a software with your intern (either co-coding or splitting small routines)
+		\item Write a software with your intern
+	\end{itemize}
+
+	\textbf{\color{color2} Hit}
+	\begin{itemize}
+		\item Easy to keep track of what the intern is doing
+		\item Keep track of the quality of the results
+		\item Good learning experience / social
+	\end{itemize}
+
+	\textbf{\color{color3} Miss}
+	\begin{itemize}
+		\item Can be unproductive
+		\item Can be frustrating for the intern
 	\end{itemize}
 
 \end{frame}
 
+\begin{frame}{Parallel work}
+
+	\begin{block}{Description}
+Internship where the intern works on a component which is key to your project
+	\end{block}
+
+	\textbf{Examples}
+	\begin{itemize}
+		\item Caracterize the material you are developing
+		\item Develop a script to post-process simulations you are doing
+		\item Run simulations of your case
+	\end{itemize}
+
+	\textbf{\color{color2} Hit}
+	\begin{itemize}
+		\item Accelerates your project 
+		\item Good learning experience
+	\end{itemize}
+
+	\textbf{\color{color3} Miss}
+	\begin{itemize}
+		\item Quality needs to be monitored adequately.
+		\item Training required which may take a lot of your time.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Orthogonal work}
+
+	\begin{block}{Description}
+Internship where the intern explores one of your side project
+	\end{block}
+
+	\textbf{Examples}
+	\begin{itemize}
+		\item Simulate a new test case which you don't need for your project
+		\item Develop a new feature in your software
+		\item Try another type of catalyst for an experience you are doing
+	\end{itemize}
+
+	\textbf{\color{color2} Hit}
+	\begin{itemize}
+		\item Can lead to completely novel research
+		\item Good learning experience
+	\end{itemize}
+
+	\textbf{\color{color3} Miss}
+	\begin{itemize}
+		\item Quality needs to be monitored adequately.
+		\item Training required which may take a lot of your time.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Who?}
+You need to establish who is responsible for what regarding your intern.
+
+\begin{block}{Role of your advisor}
+	\begin{itemize}
+	\item What is the role that your advisor will play in the internship?
+	\item Who takes care of what? Do not assume, ask questions ahead of time.
+	\item Will they meet the intern without you?
+	\end{itemize}
+\end{block}
+
+
+\visible<2->{
+	\begin{shaded}
+		\textbf{How do you envision this in your case?}
+	\end{shaded}
+	}
+\end{frame}
+
+
+\begin{frame}{Communication and management}
+	How will your intern communicate with you?
+
+	\begin{block}{Before}
+		E-mails? Slack?
+	\end{block}
+
+	\begin{block}{During}
+		Daily meetings? Weekly meetings? No meetings?
+	\end{block}
+
+	\begin{block}{After}
+		Why is this so important?
+	\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Organize the internship}
+
+	\tikzset{every picture/.style={xscale=0.7,yscale=0.8,transform shape}}
+
+	\begin{figure}[h]
+
+		\begin{ganttchart}[
+		group label node/.append style={align=left,text width=5em},
+		bar label node/.append style={align=left,text width=5em},
+		milestone label node/.append style={align=left,text width=5em},
+		Mile1/.style={milestone/.append style={fill=black,align=left,text width=0.6em}},
+		x unit=3.2mm,y unit chart=3.8mm,y unit title=4.3mm,vgrid={draw=none,dotted}, title height=1, bar height=.7, group height=0.4,
+		]{1}{42}
+		  \gantttitle{Week 2}{6} 
+		  \gantttitle{Week 4}{6}
+		  \gantttitle{Week 6}{6} 
+		  \gantttitle{Week 8}{6}
+		  \gantttitle{Week 10}{6}
+		  \gantttitle{Week 12}{6}
+		  \gantttitle{Week 14}{6}\\ 
+		  \ganttgroup{\footnotesize Work item 1}{1}{38}\\
+		  \ganttset{bar/.append style={fill=color1}}
+		  \Dganttbar{\footnotesize Element 1}{\scriptsize {}}{1}{12}\\ 
+		  \ganttbar{\footnotesize Element 2}{12}{24}\\ 
+		  \ganttbar{\footnotesize Element 3}{24}{36}\\
+		  \ganttbar{\footnotesize Element 4}{10}{20} % trajectories
+		  \ganttset{bar/.append style={fill=color5}}
+		  \Dganttbar{}{}{20}{30}\\
+
+	  
+		  \ganttgroup{\footnotesize WP 2}{3}{24} \\
+		  \ganttset{bar/.append style={fill=color2}}
+		  \Dganttbar{\footnotesize Element 1}{}{3}{6}\\
+		  \Dganttbar{\footnotesize Element 2}{}{6}{20}\\
+		  \ganttmilestone[Mile1]{\footnotesize Deliverable}{20} \\
+	  
+	  
+		  \ganttgroup{\footnotesize WP 3}{3}{24} \\
+		  \ganttset{bar/.append style={fill=color3}}
+		  \Dganttbar{\footnotesize Element 1}{}{12}{30}\\
+		  \Dganttbar{\footnotesize Element 2}{}{14}{24}\\
+		  \ganttmilestone[Mile1]{\footnotesize Deliverable}{30} \\
+	  
+		  \ganttgroup{\footnotesize WP 3}{3}{24} \\
+		  \ganttset{bar/.append style={fill=color4}}
+		  \Dganttbar{\footnotesize Element 1}{}{3}{6}\\
+		  \Dganttbar{\footnotesize Element 2}{}{6}{12}\\
+		  \ganttmilestone[Mile1]{\footnotesize Deliverable}{20} \\
+	  
+		  \ganttlink[link/.style={-stealth,semithick,densely dashed}, link type=rdldr*,link bulge 1=0.5, link bulge 2=0.5,link mid=.937]{elem10}{elem4}
+		  \ganttlink[link/.style={-stealth,semithick,densely dashed}, link type=rdldr*,link bulge 1=0.5, link bulge 2=0.5,link mid=.937]{elem24}{elem19}
+		  \ganttlink[link/.style={-stealth,thick,densely dotted}, link type=rdldr*,link bulge 1=0.5, link bulge 2=0.5,link mid=.95]{elem23}{elem17}
+		\end{ganttchart}
+		  \label{fig:gantt}
+	\end{figure}
+\end{frame}
 
 
 \section{Supervising the internship}
 
+\begin{frame}{Discussion}
+
+	\visible<1->{
+		\begin{shaded}
+			\textbf{Why?}
+
+Why are you supervising and intern this summer?
+		\end{shaded}
+		}
+	\visible<2->{
+		\begin{shaded}
+			\textbf{Challenges that may be faced?}
+
+			Let's discuss together the challenges that you may face during your supervision of an internship.
+		\end{shaded}
+		}
+
+	\visible<3->{
+		\begin{shaded}
+			\textbf{Potential outcomes?}
+
+			Let's discuss together the potential outcomes of this internship
+		\end{shaded}
+		}
+
+
+
+		
+\end{frame}
+
+\begin{frame}{Steps during the internship}
+	\begin{itemize}
+		\item Onboarding: Getting to know the lab, the space, etc.
+		\item Learning and litterature: Getting to know the topic itself
+		\item First deliverable: First contribution of your intern
+		\item ...
+		\item Final report (if needed by the institution or your lab)
+	\end{itemize}
+
+	\visible<2->{
+	\begin{block}{Communication}
+		Throughout the internship, remember that communication is key. Be explicit and explain clearly your expectactions from the internships.
+	\end{block}
+	}
+
+	\visible<3->{
+		\begin{block}{Be reasonable}
+First and foremost, internships are a learning experience. Try to have reasonable expectations of your interns.
+		\end{block}
+		}
+\end{frame}
+
 \section{Following through}
 
+\begin{frame}{Planning the \textit{after}}
+
+\begin{block}{Leveraging outcomes}
+	If you want to leverage the outcome of the research produced by your intern, you need to plan keeping track of the raw data and software they produce.
 	
-%\begin{framed}
-%	Find a scalar $T$ in $\Omega \rightarrow \mathbb{R}$ satisfying:
-%	\begin{align*}
-%			-\partial_j \partial_j T =& 10 \ \textrm{ in } \Omega\\
-%			 T =& 0 \ \textrm{ in } \Gamma
-%	\end{align*}
-%	\end{framed}
-%
-%	\visible<1->{
-%		\begin{shaded}
-%			\textbf{Goal of all iterative methods}
-%			\begin{itemize}
-%			\item Goal is to annhilate some components of teh residual vector $r=b-\mathcal{A}x$
-%			\item We will try to find a solution for $x$ that satisfies $\lVert x \rVert < \mathrm{tol}$
-%			\end{itemize}
-%	\end{shaded}}
+	\textbf{Plan this while the intern is still there!}
+\end{block}
+
+\begin{block}{Be fair}
+If the work produced by intern plays a role within one of  your publications, make sure to include the intern as a co-author. This is good their career!
+\end{block}
+
+
+\end{frame}
+
+\section{Conclusions}
+\begin{frame}{Take home message}
+\begin{itemize}
+	\item Internship are an amazing experience. I encourage you to take them seriously.
+	\item Can greatly help you.
+	\item Enable you to learn more about yourself and develop your mentoring skills.
+\end{itemize}
+
+\textbf{Be careful:}
+\begin{itemize}
+	\item Be mindful of your intern.
+	\item Supervising interns can be very challenging. It is always dependent on their skillsets and their motivations.
+\end{itemize}
+
+\textbf{Be inclusive:}
+\begin{itemize}
+	\item Eat lunch with your intern.
+	\item Try to learn about where they area from, what are their ambitions.
+	\item Tell them about yourself, do not keep them isolated from the big picture.
+\end{itemize}
+\end{frame}
+
+
 \end{document}
