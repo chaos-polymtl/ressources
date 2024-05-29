@@ -1,0 +1,123 @@
+\documentclass[t, 11pt,xcolor=dvipsnames, aspectratio=169]{beamer}
+
+% Insert number of slides defining a common footline for all slides
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{footline} { \hspace{0.1cm} \includegraphics[scale = 0.03]{logos/chaos_logo_black_without_bkg.png} \hspace*{13cm}{\small \insertframenumber/\inserttotalframenumber}\vspace{3pt}} 
+
+% Define colors useful for presentation
+\definecolor{maincolor}{RGB}{0,102,204}
+\definecolor{hcolor}{RGB}{255,128,0}
+\definecolor{mygreen}{RGB}{120,190,33}
+
+% Set colors for the presentation and references
+\setbeamercolor{title}{fg=maincolor}
+\setbeamercolor{frametitle}{fg=maincolor}
+\setbeamercolor{structure}{fg=maincolor}
+\setbeamercolor{footline}{fg=black}
+\setbeamercolor{caption name}{fg=black}
+\setbeamercolor{bibliography item}{fg=black}
+\setbeamercolor*{bibliography entry title}{fg=black}
+\setbeamercolor*{bibliography entry author}{fg=black}
+\setbeamercolor*{bibliography entry location}{fg=black}
+\setbeamercolor*{bibliography entry note}{fg=black}
+
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\usepackage[font=small,labelfont=bf]{caption}
+
+%Additional packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{appendixnumberbeamer}
+\usepackage{pbox}
+\usepackage{multirow}
+\usepackage[makeroom]{cancel}
+\usepackage[export]{adjustbox}
+\usepackage{siunitx}
+\usepackage{subcaption}
+\usepackage{wrapfig} %To wrap figures
+
+% Framed and shaded text: useful to hcolor information
+\usepackage{framed, color}
+\definecolor{shadecolor}{RGB}{220,220,220}
+
+% Tikz packages for diagrams
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,positioning,shadows,trees, calc, chains}
+
+% Useful acronyms for some math functions
+\newcommand{\dd}{\mathrm{d}} % differential d
+\newcommand{\pp}[1]{\left( #1 \right)} % easy way to do parenthesis
+
+% Deal.ii font
+\newcommand{\dealii}[1]{{\fontfamily{qcr}\selectfont #1}}
+
+% Change the label of the figure
+\renewcommand{\figurename}{Fig.}
+
+
+%-------------------------
+% Title page
+%-------------------------
+% Details for title page
+% Commenting the line below will make the title page centered
+\setbeamertemplate{title page}[default][left,colsep=-4bp,rounded=true,shadow=\beamer@themerounded@shadow]
+
+% Title of the presentation
+\title{\textbf{Title of the presentation}}
+
+% Subtitle of the presentation
+\subtitle{Subtitle}
+
+% List of authors. Good idea to put your name in bold if you are not the first author
+\author{Mama Bear, \textbf{Papa Bear}, Child Bear \\ CHAOS laboratory \\ Department of Chemical Engineering \\ Polytechnique Montréal}
+
+% Logo of the laboratory and the university
+\titlegraphic{\includegraphics[width=4.2cm]{logos/chaos_logo_black_without_bkg.png}\hspace*{6.8cm}~%
+   \includegraphics[width=3cm]{logos/Polytechnique_signature-RGB-droite_ENG.png}
+}
+
+% Add an outline slide at the beginning of each new section
+\AtBeginSection[]
+{
+  {
+  \setbeamertemplate{footline}{} %this line removes slides numbers
+  \begin{frame}[noframenumbering]
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+  }
+}
+
+
+\begin{document}
+% Title slide
+{
+\setbeamertemplate{footline}{} %this line removes slide number
+\begin{frame}[noframenumbering]
+  \titlepage
+\end{frame}
+}
+	
+% Contents slide
+{
+\setbeamertemplate{footline}{} %this line removes slide number
+\begin{frame}[noframenumbering]
+  \frametitle{\textbf{Outline}}
+  \tableofcontents
+\end{frame}
+}
+	
+% Other slides
+\section{Motivation}
+\include{frames/motivation}
+	
+\setbeamertemplate{footline}{} %this line removes slides numbers from references and additional slides
+\include{frames/references}    
+
+% Additional slides
+% This part is to add information that might be useful to answer questions
+\include{frames/additional_slides/additional_slide_1}
+\end{document}
