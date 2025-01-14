@@ -1,0 +1,544 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage{setspace}
+\usepackage[usenames,x11names]{xcolor}
+% \usepackage{cmbright}
+\usepackage{mathptmx}
+\usepackage{amsmath}
+\usepackage{amstext}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[footnotesize,bf,labelsep=space]{caption}
+\usepackage{csquotes}
+\usepackage{esvect}
+\usepackage{enumitem}
+\usepackage{eurosym}
+\usepackage{exscale}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{mathrsfs}
+\usepackage[version=3]{mhchem}
+\usepackage{multirow}
+\usepackage{placeins}
+\usepackage{rotating}
+\usepackage{siunitx}
+\usepackage{eurosym}
+\usepackage{subfig}
+\usepackage[overlay]{textpos}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\usepackage{wrapfig}
+\usepackage{color, colortbl} 
+% \usepackage[colorlinks,allcolors=black]{hyperref}
+\usepackage{afterpage}
+\usepackage{upgreek}
+\usepackage{ulem}
+\usepackage[hang,flushmargin]{footmisc}
+
+\newlist{todolist}{itemize}{2}
+\setlist[todolist]{label=$\square$}
+
+\usepackage{bibentry}
+\bibliographystyle{abbrv}
+\nobibliography*
+
+  
+
+\usepackage[yyyymmdd]{datetime}
+\renewcommand{\dateseparator}{-}
+
+\renewcommand{\baselinestretch}{1.0}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{filecontents}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{varwidth}
+\usepackage{adjustbox}
+\usetikzlibrary{patterns.meta}
+\usepackage{pgfgantt}
+
+\usetikzlibrary{calc}
+\tikzset{math3d/.style={z={(-0.65cm,-0.30cm)},y={(0cm,1cm)},x={(0.9cm,-0.15cm)}}}
+\usetikzlibrary{shapes.geometric, arrows, intersections, through}
+\usetikzlibrary{decorations.text, decorations.shapes, backgrounds}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{colorbrewer}
+\usetikzlibrary{patterns}
+\usepgfplotslibrary{colorbrewer}
+\usepgfplotslibrary{colormaps}
+
+
+\definecolor{color1}{HTML}{B3E2CD}
+\definecolor{color2}{HTML}{FDCDAC}
+\definecolor{color3}{HTML}{CBD5E8}
+\definecolor{color4}{HTML}{F4CAE4}
+\definecolor{color5}{HTML}{E6F5C9}
+\definecolor{color6}{HTML}{F6E5C9}
+\definecolor{color7}{HTML}{F6CBC9}
+
+\newcommand\pgfmathsinandcos[3]{%
+  \pgfmathsetmacro#1{sin(#3)}%
+  \pgfmathsetmacro#2{cos(#3)}%
+}
+\newcommand\LongitudePlane[3][current plane]{%
+  \pgfmathsinandcos\sinEl\cosEl{#2} % elevation
+  \pgfmathsinandcos\sint\cost{#3} % azimuth
+  \tikzset{#1/.style={cm={\cost,\sint*\sinEl,0,\cosEl,(0,0)}}}
+}
+\newcommand\LatitudePlane[3][current plane]{%
+  \pgfmathsinandcos\sinEl\cosEl{#2} % elevation
+  \pgfmathsinandcos\sint\cost{#3} % latitude
+  \pgfmathsetmacro\yshift{\cosEl*\sint}
+  \tikzset{#1/.style={cm={\cost,0,0,\cost*\sinEl,(0,\yshift)}}} %
+}
+\newcommand\DrawLongitudeCircle[2][1]{
+  \LongitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+   % angle of "visibility"
+  \pgfmathsetmacro\angVis{atan(sin(#2)*cos(\angEl)/sin(\angEl))} %
+  \draw[current plane,very thin,solid] (\angVis:1) arc (\angVis:\angVis+180:1);
+  \draw[current plane,very thin,dashed] (\angVis-180:1) arc (\angVis-180:\angVis:1);
+}%this is fake: for drawing the grid
+\newcommand\DrawLongitudeCirclered[2][1]{
+  \LongitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+   % angle of "visibility"
+  \pgfmathsetmacro\angVis{atan(sin(#2)*cos(\angEl)/sin(\angEl))} %
+  \draw[current plane] (150:1) arc (150:180:1);
+  %\draw[current plane,dashed] (-50:1) arc (-50:-35:1);
+}%for drawing the grid
+\newcommand\DLongredd[2][1]{
+  \LongitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+   % angle of "visibility"
+  \pgfmathsetmacro\angVis{atan(sin(#2)*cos(\angEl)/sin(\angEl))} %
+  \draw[current plane,black,dashed, ultra thick] (150:1) arc (150:180:1);
+}
+\newcommand\DLatred[2][1]{
+  \LatitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+  \pgfmathsetmacro\sinVis{sin(#2)/cos(#2)*sin(\angEl)/cos(\angEl)}
+  % angle of "visibility"
+  \pgfmathsetmacro\angVis{asin(min(1,max(\sinVis,-1)))}
+  \draw[current plane,dashed,black,ultra thick] (-50:1) arc (-50:-35:1);
+
+}
+\newcommand\fillred[2][1]{
+  \LongitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+   % angle of "visibility"
+  \pgfmathsetmacro\angVis{atan(sin(#2)*cos(\angEl)/sin(\angEl))} %
+  \draw[current plane,red,thin] (\angVis:1) arc (\angVis:\angVis+180:1);
+
+}
+
+\newcommand\DrawLatitudeCircle[2][1]{
+  \LatitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+  \pgfmathsetmacro\sinVis{sin(#2)/cos(#2)*sin(\angEl)/cos(\angEl)}
+  % angle of "visibility"
+  \pgfmathsetmacro\angVis{asin(min(1,max(\sinVis,-1)))}
+  \draw[current plane,very thin,solid] (\angVis:1) arc (\angVis:-\angVis-180:1);
+  \draw[current plane,very thin,dashed] (180-\angVis:1) arc (180-\angVis:\angVis:1);
+}%Defining functions to draw limited latitude circles (for the red mesh)
+
+\newcommand\DrawLatitudeCirclered[2][1]{
+  \LatitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+  \pgfmathsetmacro\sinVis{sin(#2)/cos(#2)*sin(\angEl)/cos(\angEl)}
+  % angle of "visibility"
+  \pgfmathsetmacro\angVis{asin(min(1,max(\sinVis,-1)))}
+  %\draw[current plane,red,thick] (-\angVis-50:1) arc (-\angVis-50:-\angVis-20:1);
+\draw[current plane] (-50:1) arc (-50:-35:1);
+}
+
+
+\newcommand\DrawLatitudeCircleredCoord[4][1]{
+  \LatitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+  \pgfmathsetmacro\sinVis{sin(#2)/cos(#2)*sin(\angEl)/cos(\angEl)}
+  % angle of "visibility"
+  \pgfmathsetmacro\angVis{asin(min(1,max(\sinVis,-1)))}
+  %\draw[current plane,red,thick] (-\angVis-50:1) arc (-\angVis-50:-\angVis-20:1);
+\draw[current plane, thick] (-50:1) coordinate (#3) arc (-50:-35:1) coordinate (#4);
+}
+
+\newcommand\DrawLongitudeCircleredCoord[4][1]{
+  \LongitudePlane{\angEl}{#2}
+  \tikzset{current plane/.prefix style={scale=#1}}
+   % angle of "visibility"
+  \pgfmathsetmacro\angVis{atan(sin(#2)*cos(\angEl)/sin(\angEl))} %
+  \draw[current plane] (150:1) coordinate (#3) arc (150:180:1) coordinate (#4);
+  %\draw[current plane,dashed] (-50:1) arc (-50:-35:1);
+}%for drawing the grid
+
+\tikzset{%
+  >=latex,
+  inner sep=0pt,%
+  outer sep=2pt,%
+  mark coordinate/.style={inner sep=0pt,outer sep=0pt,minimum size=3pt,
+    fill=black,circle}%
+}
+
+
+
+\setcounter{topnumber}{1}
+\setcounter{bottomnumber}{0}
+\setcounter{totalnumber}{2}
+\setcounter{secnumdepth}{2}
+
+\setlength{\skip\footins}{16pt}
+
+% COLUMN TYPES
+
+\newcolumntype{x}{>{\small}c}
+\newcolumntype{y}{>{\small}l}
+\newcolumntype{z}{>{\small}r}
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+% LENGTH VARIABLES
+
+\newcommand*{\tablewidth}{215mm} \newcommand*{\figurefactor}{0.8}
+\newcommand*{\subfigurefactor}{0.425}
+\newcommand{\comment}[1]{\textcolor{blue}{(#1)}}
+
+% NUMBERING EQUATIONS AND FIGURES
+
+\renewcommand{\theequation}{\arabic{equation}}
+%\renewcommand{\theequation}{\thesection.\arabic{equation}}
+%\numberwithin{equation}{section}
+\renewcommand{\thefigure}{\arabic{figure}}
+%\renewcommand{\thefigure}{\thesection.\arabic{figure}}
+%\numberwithin{figure}{section}
+\renewcommand{\thetable}{\arabic{table}}
+%\renewcommand{\thetable}{\thesection.\arabic{table}}
+%\numberwithin{table}{section}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\newcommand{\D}{\displaystyle}
+\newcommand{\T}{\textstyle}
+
+\renewcommand{\thefootnote}{\arabic{footnote}}
+
+% TEXT LAYOUT (Letter = 216mm x 279mm)
+\usepackage[letterpaper]{geometry}
+\setlength{\headsep}{0.3cm}
+\setlength{\headheight}{1cm}
+\geometry{textwidth=176.5mm, textheight=239.5mm}
+\renewcommand{\headrulewidth}{0pt}
+
+%% TODO options
+\usepackage{xargs}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+
+
+
+\definecolor{darkgreen}{rgb}{0.0, 0.2, 0.13}
+\usepackage[framemethod=TikZ]{mdframed}
+\newcounter{theo}[section]\setcounter{theo}{0}
+\renewcommand{\thetheo}{\arabic{chapter}.\arabic{theo}}
+
+\newcounter{publications}[section]\setcounter{publications}{0}
+\renewcommand{\thetheo}{\arabic{chapter}.\arabic{publications}}
+\newenvironment{publications}[2][0]{%
+    \refstepcounter{publications}
+    % Code for box design goes here.
+    \ifstrempty{#1}%
+    % if condition (without title)
+    {\mdfsetup{%
+        frametitle={%\ ~
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[rounded corners=2pt,anchor=east,rectangle,fill=darkgreen!65]
+            {\strut \small \ \color{white}{Related publications\ ~}};}
+        }%
+    % else condition (with title)
+    }{\mdfsetup{%
+        frametitle={%
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[rounded corners=2pt,anchor=east,rectangle,fill=darkgreen!65]
+            {\strut \small \ \color{white}{Third-party funding:~#1\ ~}};}%
+        }%
+    }%
+    % Both conditions
+    \mdfsetup{%
+        innertopmargin=0pt,linecolor=darkgreen!65,%
+        linewidth=1pt,topline=true,%
+        roundcorner=3pt,frametitleaboveskip=\dimexpr-\ht\strutbox\relax%
+    }
+\begin{mdframed}[backgroundcolor=darkgreen!5]\relax\sloppy\small}{%
+\end{mdframed}}
+
+\setlength{\belowcaptionskip}{-10pt}
+
+\newgantttimeslotformat{stardate}{% \def\decomposestardate##1.##2\relax{%
+\def\stardateyear{##1}\def\stardateday{##2}% }% \decomposestardate#1\relax%
+\pgfcalendardatetojulian{\stardateyear-01-01}{#2}% \advance#2 by-1\relax%
+\advance#2 by\stardateday\relax%
+}
+
+
+\newganttlinktype{rdldr*}{%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xLeft + \ganttvalueof{link bulge 1} * \ganttvalueof{x unit},
+      \yUpper) --
+    ($(\xLeft + \ganttvalueof{link bulge 1} * \ganttvalueof{x unit},
+      \yUpper)!%
+      \ganttvalueof{link mid}!%
+      (\xLeft + \ganttvalueof{link bulge 1} * \ganttvalueof{x unit},
+      \yLower)$) --
+    ($(\xRight - \ganttvalueof{link bulge 2} * \ganttvalueof{x unit},
+      \yUpper)!%
+      \ganttvalueof{link mid}!%
+      (\xRight - \ganttvalueof{link bulge 2} * \ganttvalueof{x unit},
+      \yLower)$) --
+    (\xRight - \ganttvalueof{link bulge 2} * \ganttvalueof{x unit},
+      \yLower) --
+    (\xRight, \yLower);%
+}
+\ganttset{
+  link bulge 1/.link=/pgfgantt/link bulge,
+  link bulge 2/.link=/pgfgantt/link bulge}
+  
+\hyphenation{in-com-press-ible}
+\hyphenation{com-press-ible}
+
+\newcommand{\link}[3][blue]{\hyperlink{#2}{\color{#1}{#3}}}%
+
+% \numberwithin{page}{section}
+% \renewcommand{\thepage}{\thesection-\arabic{page}}
+\usepackage{titlesec}
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+
+
+\fancypagestyle{firststyle}
+{
+   \fancyhf{}
+   \fancyfoot[C]{\thepage}
+   \renewcommand{\headrulewidth}{0pt} % removes horizontal header line
+}
+\fancyhead[l]{}
+\fancyhead[r]{Internship project description: \textbf{Thermodynamic dans la DEM} \hfill Written by: \textbf{Oreste Marquis}}
+\setlength{\parindent}{10pt}
+
+\DeclareTextFontCommand{\emph}{\it}
+
+\makeatletter
+\renewcommand{\fnum@figure}{Fig.~\thefigure}
+\makeatother
+\newcommand\Dganttbar[4]{%
+  \ganttbar{#1}{#3}{#4}\ganttbar[inline,bar label font=\footnotesize]{#2}{#3}{#4}
+}
+
+
+\makeatletter
+\DeclareRobustCommand\em
+  {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+     \eminnershape \else \slshape \fi}%
+\makeatother
+
+
+
+\usepackage{array}
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+
+\begin{document}
+\pagestyle{fancy}
+
+
+\section{Context}
+
+Les matériaux granulaires, définis comme un agglomérat de particules solides, sont omniprésents dans notre quotidien et dans l'industrie. Parmi ces matériaux, on retrouve les poudres utilisées pour le maquillage, les copeaux de bois dans les parcs ou encore les divers grains entreposés dans les silos. Cependant, la dynamique de ces matériaux est complexe. Pour améliorer et optimiser les différents procédés où ils interviennent, il est courant d'utiliser l'approche numérique des éléments discrets (DEM, pour Discrete Element Method). Cette méthode permet de simuler le comportement de chaque particule individuellement, en tenant compte des forces qui s'exercent sur elles (par exemple, les forces volumiques et les forces de contact).
+
+Lorsqu'on fait référence à la DEM, on parle généralement de la dynamique des particules, de la conservation de la quantité de mouvement et de l'énergie cinétique. Cependant, il est possible d'aller plus loin en intégrant le transfert thermique dans le système, donnant naissance à une approche appelée TDEM (Thermal Discrete Element Method). Cette extension de la DEM est relativement récente, et il n'existe pas encore de consensus sur la meilleure manière de l'implémenter ni de revue exhaustive de la littérature sur le sujet. La principale difficulté de la TDEM réside dans l'identification des mécanismes de transfert thermique dominants et dans leur modélisation. Parmi ces mécanismes, on distingue principalement:
+
+\begin{itemize}
+  \item La conduction au travers de la particule même \cite{komossa_heat_2015,oschmann_development_2016};
+  \item La conduction entre les particules par surface de contact \cite{qi_particle_2018,fischer_particle-particle_2023};
+  \item La conduction entre les particules par le fluide interstitiel \cite{wang_cfd-dem_2019,peng_heat_2020};
+  \item La convection naturelle ou forcée du fluide interstitiel \cite{yang_particle_2015,wang_cfd-dem_2019};
+  \item Le rayonnement des particules \cite{wu_numerical_2017,gavino_discrete_2022};
+  \item Le transfert thermique fait par l'advection des particules elles-mêmes \cite{wang_mixing_2021}.
+\end{itemize}
+
+Dans le contexte de l'ingénierie chimique, la TDEM est particulièrement intéressante pour simuler des procédés tels que le séchage ou la pyrolyse, qui sont couramment utilisés pour le traitement thermique des déchets, par exemple. Parmi les équipements les plus fréquemment employés pour ces procédés, on trouve le four rotatif, bien qu'il existe d'autres options comme le séchoir à lit fluidisé. La simulation de ces équipements permet d'obtenir une compréhension détaillée des processus, souvent difficile à atteindre par des méthodes expérimentales. Cela ouvre la voie à l'optimisation des procédés, notamment pour maximiser l'efficacité énergétique et la qualité des produits finaux.
+
+Le logiciel Lethe, développé par le groupe CHAOS, possède déjà les capacités pour simuler des fours rotatifs. En ajoutant les fonctionnalités de la TDEM, nous espérons représenter les transferts thermiques dans ce type d'équipement. Une fois le modèle vérifié et validé, il pourra être utilisé par l'ensemble du groupe pour leurs recherches, contribuant ainsi à l'avancement des connaissances dans ce domaine. Plus précisément, cette nouvelle fonctionnalité sera essentielle pour ma recherche sur le chauffage par micro-ondes, et elle fera partie de mes publications futures. Selon la vitesse de progression du projet, il sera également possible d'ajouter le transfert thermique à la CFD-DEM de Lethe, ce qui permettra de simuler des procédés encore plus complexes, comme les séchoirs à lit fluidisé.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{DEM.png}
+  \caption{Distinction entre la DEM résolue (à gauche) et la DEM non-résolue (à droite)}
+  \label{fig:DEM}
+\end{figure}
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{TDEM.png}
+  \caption{Exemple de simulation TDEM que l'on aimerait pouvoir faire. Figure tirée de \cite{fischer_particle-particle_2023}.}
+  \label{fig:TDEM}
+\end{figure}
+
+\newpage
+\section{Research objectives}
+
+\textbf{General Objective:} Implementer un modèle thermodynamique dans la DEM et CFD-DEM de Lethe.
+
+\begin{enumerate}
+  \item Faire une revue de la literature des differentes méthodes et modèles de la thermodynamique dans la DEM et CFD-DEM.
+  \item Ajouter le modèle thermodynamique le plus adequat au module DEM de Lethe.
+  \item Designer une expérience numérique de validation pour la thermodynamique dans la DEM.
+  \item Ajouter le modèle thermodynamique le plus adequat pour la CFD-DEM de Lethe.
+  \item Designer une expérience numérique de validation pour la thermodynamique dans la CFD-DEM.
+\end{enumerate}
+
+
+\section{Relevant scientific litterature}
+Mis à part les articles cités dans le contexte, nous nous baserons également sur les travaux de Christine Beaulieu \cite{beaulieu_impact_nodate} qui seront utiles pour avoir une première introduction au sujet. Comme c'est une thèse de doctorat en français, elle est plus accessible et comporte plus de détails sur le sujet que les articles. Lire la revue de la littérature qui y est présentée sera un bon point de départ pour le projet. Pour plus de détails sur la DEM et Lethe les deux articles suivants sont recommandés :
+\subsection{DEM dans Lethe}
+\begin{itemize}
+  \item  \bibentry{berard_experimental_2020}
+  \item  \bibentry{golshan_lethe-dem_2023}
+\end{itemize}
+
+\section{Onboarding documents}
+
+Parmis les exemples de Lethe, il serait particulièrement intéressant de compiler et lancer celui du "small scale rotating drum", avec son fichier de post-processing. Cela permettra de se familiariser avec la façpn dont les simulations sont lancées et comment les résultats sont analysés.
+
+\begin{center}
+  \begin{table}[h]
+    \caption{Resources to learn how to program in C++}
+    \centering
+    \begin{tabular}{p{3cm}|p{8cm}|c}
+      Topic                   & References                                      & Section or pages              \\
+      \hline
+      \hline
+      General C++ programming & https://www.learncpp.com/                       & All                           \\
+                              & Stroustrup, B. (2018). A Tour of C++ (2nd ed.).
+      Addison-Wesley.                                                                                           \\
+      \hline
+      Lethe                   & https://chaos-polymtl.github.io/lethe/          & DEM parameter file and theory \\
+    \end{tabular}
+  \end{table}
+\end{center}
+
+\begin{center}
+  \begin{table}[h]
+    \caption{Resources to learn Git}
+    \centering
+    \begin{tabular}{p{3cm}|p{9cm}|c}
+      Topic                 & References                              & Section or pages \\
+      \hline
+      \hline
+      General Git tutorials & https://www.atlassian.com/git/tutorials & All              \\
+      \hline
+      Lethe                 & https://chaos-polymtl.github.io/lethe/  & Contributing     \\
+    \end{tabular}
+  \end{table}
+\end{center}
+
+
+\section{Workplace conduct}
+
+\begin{itemize}
+  \item \textbf{Number of working hours per week - 35: } Ceci est une moyenne de la charge de travail hebdomadaire. Il se peut que certaines semaines soient plus chargées que d'autres.
+  \item \textbf{Core working hours - 10:00/15:00: } Je serai disonible tous les jours dans ces heures (sauf si je suis en cours) pour discuter et répondre aux questions.
+  \item \textbf{Mandatory meetings: } Je propose de participer à la réunion de groupe hebdomadaire le vendredi 9h AM au A480.
+\end{itemize}
+
+
+\section{Checklist}
+
+\begin{todolist}
+  \item Mot de passe du bureau
+  \item Visite de Polytechnique
+  \item Ordinateur prêt
+\end{todolist}
+
+\section{Gantt Chart}
+
+\begin{figure}[h]
+
+  \begin{ganttchart}[
+      group label node/.append style={align=left,text width=5em},
+      bar label node/.append style={align=left,text width=5em},
+      milestone label node/.append style={align=left,text width=5em},
+      Mile1/.style={milestone/.append style={fill=black,align=left,text width=0.6em}},
+      x unit=3.2mm,y unit chart=3.8mm,y unit title=4.3mm,vgrid={draw=none,dotted}, title height=1, bar height=.7, group height=0.4,
+    ]{1}{48}
+    \gantttitle{Mois 1}{8}
+    \gantttitle{Mois 2}{8}
+    \gantttitle{Mois 3}{8}
+    \gantttitle{Mois 4}{8}
+    \gantttitle{Mois 5}{8}
+    \gantttitle{Mois 6}{8}\\
+    \ganttgroup{\scriptsize TCFD-DEM}{1}{46}\\
+    \ganttset{bar/.append style={fill=color1}}
+    \Dganttbar{\tiny Validation DEM}{\scriptsize {}}{1}{12}\\
+    \ganttbar{\tiny TDEM}{13}{20}\\
+    \ganttbar{\tiny Validation TDEM}{21}{24}\\
+    \ganttbar{\tiny TCFD-DEM}{25}{36} \\
+    \ganttbar{\tiny Validation TCFD-DEM}{37}{40} \\
+    \ganttmilestone[Mile1]{\tiny TCFD-DEM}{40} \\
+
+    \ganttgroup{\scriptsize V. DEM}{1}{12} \\
+    \ganttset{bar/.append style={fill=color2}}
+    \Dganttbar{\tiny Familiarisation Lethe}{}{1}{4}\\
+    \Dganttbar{\tiny Lecture théorie DEM}{}{2}{6}\\
+    \Dganttbar{\tiny Design test}{}{6}{8}\\
+    \Dganttbar{\tiny Implémentation test}{}{8}{12}\\
+    \ganttmilestone[Mile1]{\tiny Exemple Lethe}{12} \\
+
+
+    \ganttgroup{\scriptsize TDEM}{13}{20} \\
+    \ganttset{bar/.append style={fill=color3}}
+    \Dganttbar{\tiny Revue Litt.}{}{13}{16}\\
+    \Dganttbar{\tiny Implémentation model}{}{15}{20}\\
+    \ganttmilestone[Mile1]{\tiny Modèle TDEM}{20} \\
+
+    \ganttgroup{\scriptsize V. TDEM}{21}{24} \\
+    \ganttset{bar/.append style={fill=color4}}
+    \Dganttbar{\tiny Design test}{}{21}{22}\\
+    \Dganttbar{\tiny Implémentation test}{}{23}{24}\\
+    \ganttmilestone[Mile1]{\tiny Exemple Lethe}{24} \\
+
+    \ganttgroup{\scriptsize TCFD-DEM}{25}{32} \\
+    \ganttset{bar/.append style={fill=color5}}
+    \Dganttbar{\tiny Revue Litt.}{}{25}{28}\\
+    \Dganttbar{\tiny Implémentation model}{}{27}{32}\\
+    \ganttmilestone[Mile1]{\tiny Modèle TCFD-DEM}{32} \\
+
+    \ganttgroup{\scriptsize V. TCFD-DEM}{33}{36} \\
+    \ganttset{bar/.append style={fill=color6}}
+    \Dganttbar{\tiny Design test}{}{33}{34}\\
+    \Dganttbar{\tiny Implémentation test}{}{35}{36}\\
+    \ganttmilestone[Mile1]{\tiny Exemple Lethe}{36} \\
+
+    \ganttgroup{\scriptsize Wrap up}{37}{40} \\
+    \ganttset{bar/.append style={fill=color7}}
+    \Dganttbar{\tiny Clean up code}{}{37}{38}\\
+    \Dganttbar{\tiny Présentation}{}{39}{40}\\
+    \ganttmilestone[Mile1]{\tiny Group meeting}{40} \\
+
+    % \ganttlink[link/.style={-stealth,semithick,densely dashed}, link type=rdldr*,link bulge 1=0.5, link bulge 2=0.5,link mid=.937]{elem20}{elem21}
+
+  \end{ganttchart}
+  \caption{\setstretch{0.95}Work plan of the internship
+    \vspace{-0.7em}}
+  \label{fig:gantt}
+\end{figure}
+
+
+\bibliography{references.bib}
+
+
+\end{document}
