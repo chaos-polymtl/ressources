@@ -402,19 +402,19 @@ These kind of demonstration is something we take for granted, but it is not triv
 
 \begin{frame}{\textbf{A straightforward implementation}}
 For mass conservation, we have:
-\begin{align}
+\begin{align*}
 \partial_t \epsilon + \partial_i (\epsilon u_i) = 0
-\end{align}
+\end{align*}
 We multiply by the test function $q$ and integrate over the domain:
-\begin{align}
-	\pp{q,\partial_t \varepsilon}_\Omega + \pp{q, \varepsilon \partial_i u_i}_\Omega + \pp{q, u_i \partial_i \varepsilon}_\Omega + \underbrace{\pp{\tau_{\vm{u}} \partial_i q, \mathcal{R}_{i}^{\mathrm{VANS}}}_{\Omega_e}}_{\mathrm{PSPG}} = 0
-\end{align}
+\begin{align*}
+	\pp{q,\partial_t \varepsilon}_\Omega + \pp{q, \varepsilon \partial_i u_i}_\Omega + \pp{q, u_i \partial_i \varepsilon}_\Omega + \underbrace{\pp{\tau_{\vm{u}} \partial_i q, \mathcal{R}_{i}}_{\Omega_e}}_{\mathrm{PSPG}} = 0
+\end{align*}
 
 The last term is our traditional PSPG term to enable the use of equal-order interpolation. The expression of the strong residual is:
-\begin{align}
-	\vm{\mathcal{R}}^{\mathrm{VANS}} &= \varepsilon_{\mathrm{f}}\partial_t \vm{u} + \varepsilon_{\mathrm{f}}\vm{u} \nabla \cdot \vm{u} 
-	+ \frac{1}{\rho} \bra{\varepsilon_{\mathrm{f}}\nabla p - \nu \pp{\varepsilon_{\mathrm{f}}\nabla^2 \vm{u} + \nabla \vm{u} \cdot \nabla \varepsilon_{\mathrm{f}}} }
-\end{align}
+\begin{align*}
+	\mathcal{R}_{i} &= \varepsilon \partial_t u_i + \varepsilon {u_j} \partial_j \cdot {u_i} 
+	+ \frac{1}{\rho} \bra{\varepsilon \partial_i p - \nu \varepsilon \partial_j \partial_j {u_i} + \nabla {u_i} \cdot \nabla \varepsilon_{\mathrm{f}}}
+\end{align*}
 \end{frame}
 
 \section{Another approach}
