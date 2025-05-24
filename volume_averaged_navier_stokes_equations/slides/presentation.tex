@@ -375,23 +375,23 @@ These kind of demonstration is something we take for granted, but it is not triv
 \begin{frame}
 	\frametitle{\textbf{Problem: Variational formulation}}
 	%\fontsize{10.5}{11}\selectfont
-	We multiply by the test functions $\bm{v}$ and $q$, and integrate over the domain using the notation $(a, b)_{\Omega} = \int a b \ \text{d}\Omega$:
+	We multiply by the test functions $v_i$ and $q$, and integrate over the domain using the notation $(a, b)_{\Omega} = \int a b \ \text{d}\Omega$:
 	\begin{align*}
-		\left( q, \nabla \cdot \bm{u} \right)_{\Omega} + (\bm{v}, \partial_t \bm{u} + (\bm{u} \cdot \nabla) \bm{u} + \underbrace{\nabla p}_{1} - \underbrace{\nu \Delta \bm{u}}_{2} - \bm{f} )_{\Omega} = 0
+		\left( q, \partial_i \cdot u_i \right)_{\Omega} + (v_i, \partial_t u_i + (u_j \partial_j) \bm{u} + \underbrace{\partial_i p}_{1} - \underbrace{\nu \partial_j \partial_j u_i}_{2})_{\Omega} = 0
 	\end{align*}
 	We integrate by parts terms $1$ and $2$:
 	\begin{align*}
-		(\bm{v}, \nabla p)_{\Omega} = - (\nabla \cdot \bm{v}, p)_{\Omega} + ( \bm{n} \cdot \bm{v}, p)_{\partial\Omega} \\
-		(\bm{v}, -\nu \Delta \bm{u})_{\Omega} = \nu (\nabla \bm{v}, \nabla \bm{u})_{\Omega} - (\bm{v} \bm{n}, \nu \nabla \bm{u})_{\partial\Omega} 
+		({v}_i, \partial_i p)_{\Omega} = - (\partial_i  {v}_i, p)_{\Omega} + ( n_i  {v}_i, p)_{\partial\Omega} \\
+		({v}_i, -\nu \partial_j \partial_j {u}_i)_{\Omega} = \nu (\partial_i {v}_j,  \partial_i {u}_j)_{\Omega} - (n_i {v}_j, \nu \partial_i {u}_j)_{\partial\Omega} 
 	\end{align*}
 	If we assume Dirichlet B.Cs or zero stress conditions on $\partial\Omega$:
 	\begin{align*}
-		( \bm{n} \cdot \bm{v}, p)_{\partial\Omega} - (\bm{v} \bm{n}, \nu \nabla \bm{u})_{\partial\Omega} = 0
+		( {n}_i {v}_i, p)_{\partial\Omega} - ({v}_i {n}_j, \nu \partial_i {u}_j)_{\partial\Omega} = 0
 	\end{align*}
 	%which is an outlet boundary condition where the normal stress is zero. Approximately empose an outlet boundary condition with a zero average pressure.
 	Writing everything together we get the final weak form:
 	\begin{align*}
-		F(\bm{u}, p) := \left( q, \nabla \cdot \bm{u} \right)_{\Omega} + (\bm{v}, \partial_t \bm{u})  + {(\bm{v}, (\bm{u} \cdot \nabla) \bm{u})_{\Omega}} \\
+		F({u}_i, p) := \left( q, \nabla \cdot \bm{u} \right)_{\Omega} + (\bm{v}, \partial_t \bm{u})  + {(\bm{v}, (\bm{u} \cdot \nabla) \bm{u})_{\Omega}} \\
 		- (\nabla \cdot \bm{v}, p)_{\Omega} + \nu (\nabla \bm{v}, \nabla \bm{u})_{\Omega} - (\bm{v}, \bm{f})_{\Omega}  = 0
 	\end{align*}
 	%\visible<2->{
@@ -413,7 +413,7 @@ We multiply by the test function $q$ and integrate over the domain:
 The last term is our traditional PSPG term to enable the use of equal-order interpolation. The expression of the strong residual is:
 \begin{align*}
 	\mathcal{R}_{i} &= \varepsilon \partial_t u_i + \varepsilon {u_j} \partial_j \cdot {u_i} 
-	+ \frac{1}{\rho} \bra{\varepsilon \partial_i p - \nu \varepsilon \partial_j \partial_j {u_i} + \nabla {u_i} \cdot \nabla \varepsilon_{\mathrm{f}}}
+	+ \frac{1}{\rho} \bra{\varepsilon \partial_i p - \nu \varepsilon \partial_j \partial_j {u_i} + \partial_i {u_j} \partial_j \varepsilon}
 \end{align*}
 \end{frame}
 
