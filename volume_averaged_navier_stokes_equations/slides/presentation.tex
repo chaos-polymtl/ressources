@@ -401,16 +401,20 @@ These kind of demonstration is something we take for granted, but it is not triv
 
 
 \begin{frame}{\textbf{A straightforward implementation}}
-	\[
-	\pp{q,\partial_t \varepsilon_{\mathrm{f}}}_\Omega + \pp{q, \varepsilon_{\mathrm{f}}\nabla \cdot \vm{u}}_\Omega + \pp{q, \vm{u} \nabla \varepsilon_{\mathrm{f}}}_\Omega + \underbrace{\pp{\tau_{\vm{u}} \nabla q, \vm{\mathcal{R}}^{\mathrm{VANS}}_{\mathrm{A},\mathrm{B}}}_{\Omega_e}}_{\mathrm{PSPG}} = 0
-	\]
-	\begin{align}
-	F^{\mathrm{VANS}}_{\mathrm{A}}\pp{\vm{u}, p, \varepsilon_{\mathrm{f}}} := &\notag \pp{\vm{w}, \varepsilon_{\mathrm{f}}\partial_t\vm{u} + \varepsilon_{\mathrm{f}}\vm{u} \cdot \nabla \vm{u}}_{\Omega} + \pp{\vm{w}, \nu \nabla \vm{u} \cdot \nabla{\varepsilon_{\mathrm{f}}}}_\Omega  \\ 
-	\notag &+ \pp{\nabla \vm{w}, \nu \varepsilon_{\mathrm{f}}\nabla \vm{u}}_{\Omega} - \pp{\nabla \cdot \vm{w}, p \varepsilon_{\mathrm{f}}}_\Omega - \pp{\vm{w}, p \nabla \varepsilon_{\mathrm{f}}}_\Omega  \\
-	\notag &+ \pp{\vm{w}, \frac{\bar{\vm{f}}_\mathrm{A}^{\mathrm{pf}}}{V_\Omega}}_\Omega + \underbrace{\pp{\tau_{\vm{u}} \vm{u} \cdot \nabla \vm{w}, \vm{\mathcal{R}}^{\mathrm{VANS}}}_{\Omega_e}}_{\mathrm{SUPG}} \\
-	 &+ \underbrace{\pp{\gamma \nabla \cdot \vm {w}, \partial_t \varepsilon_{\mathrm{f}}+ \nabla \cdot \pp{\varepsilon_{\mathrm{f}}\vm{u}}}_{\Omega_e}}_{\mathrm{grad-div}} = 0
-	 \end{align}
+For mass conservation, we have:
+\begin{align}
+\partial_t \epsilon + \partial_i (\epsilon u_i) = 0
+\end{align}
+We multiply by the test function $q$ and integrate over the domain:
+\begin{align}
+	\pp{q,\partial_t \varepsilon}_\Omega + \pp{q, \varepsilon \partial_i u_i}_\Omega + \pp{q, u_i \partial_i \varepsilon}_\Omega + \underbrace{\pp{\tau_{\vm{u}} \partial_i q, \mathcal{R}_{i}^{\mathrm{VANS}}}_{\Omega_e}}_{\mathrm{PSPG}} = 0
+\end{align}
 
+The last term is our traditional PSPG term to enable the use of equal-order interpolation. The expression of the strong residual is:
+\begin{align}
+	\vm{\mathcal{R}}^{\mathrm{VANS}} &= \varepsilon_{\mathrm{f}}\partial_t \vm{u} + \varepsilon_{\mathrm{f}}\vm{u} \nabla \cdot \vm{u} 
+	+ \frac{1}{\rho} \bra{\varepsilon_{\mathrm{f}}\nabla p - \nu \pp{\varepsilon_{\mathrm{f}}\nabla^2 \vm{u} + \nabla \vm{u} \cdot \nabla \varepsilon_{\mathrm{f}}} }
+\end{align}
 \end{frame}
 
 \section{Another approach}
