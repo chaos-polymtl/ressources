@@ -130,6 +130,29 @@
    \includegraphics[width=3cm]{../../logos/Polytechnique_signature-RGB-droite_ENG.png}
 }
 
+%****************************************
+% Parenthesis
+%****************************************
+\newcommand{\bra}[1]{\left[#1\right]}
+\newcommand{\pp}[1]{\left(#1\right)}
+\newcommand{\norm}[1]{\left|#1\right|}
+\newcommand{\ens}[1]{\left\langle #1\right\rangle}
+
+%***************************
+% Differentials
+%***************************
+\newcommand{\dt}[1]{\partial_t \left(#1\right)}
+\newcommand{\dx}[1]{\partial_x \left(#1\right)}
+\newcommand{\dd}[2]{\frac{\partial #1}{\partial #2}}
+
+%***************************
+% bmtor maths
+%***************************
+%Rank 1 tensor
+\newcommand{\vm}[1]{\bm{#1}}
+%Rank 2 tensor
+\newcommand{\tm}[1]{\bm{#1}}
+
 
 
 \begin{document}
@@ -270,18 +293,18 @@ This means that $u_z$ is:
 
 		%\vspace{0.1cm}
 		\begin{columns}[c]
-			\begin{column}{0.5\textwidth}
-				Variation imply of $\epsilon$ create:
+			\begin{column}{0.3\textwidth}
+				Variation of $\epsilon$ create:
 				\begin{itemize}
 					\item Acceleration and/or deceleration of the fluid
 					\item \textbf{Should it generate stresses?}
 					\item \textbf{Where is this momentum coming from?}
 				\end{itemize}
 				\end{column}
-			\begin{column}{0.5\textwidth}
+			\begin{column}{0.7\textwidth}
 				\vspace*{-\baselineskip}
 				\begin{center}
-					%\includegraphics[width=0.9\textwidth]{images/vans_cylinder.png}
+					\includegraphics[width=0.99\textwidth]{images/1d_flow}
 				\end{center}
 			\end{column}
 		\end{columns}
@@ -290,52 +313,130 @@ This means that $u_z$ is:
 
 \section{Origin of the equations}
 
+\begin{frame}
+\frametitle{\textbf{Origin of the VANS equations}}
+\begin{block}{Reference}
+There are many ways to derive the VANS equations, but they all rely on the same idea: \textbf{volume averaging}. Here I will follow Anderson \& Jackson's approach \cite{anderson_fluid_1967}. However, alternative/similar demonstration exist notably in the book by Balachandar \cite{balachandar2024fundamentals} Crowe \textit{et al.} \cite{crowe1998multiphase} Prosperetti and Tryggvason \cite{prosperetti2009computational} etc.
+\end{block}
+
+\begin{block}{Small Warning}
+These kind of demonstration is something we take for granted, but it is not trivial. It requires a good understanding of the physics and mathematics behind the equations. I do not feel people have reached clear conclusion on the best way to derive these equations. I will try to give you the main ideas.
+\end{block}
+
+\end{frame}
+
+\begin{frame}{\textbf{Volume averaging}}
+
+\end{frame}
+
+\begin{frame}{\textbf{Mass conservation}}
+
+\end{frame}
+
+\begin{frame}{\textbf{Momentum conservation}}
+
+\end{frame}
+
 
 \section{A straightforward implementation}
 
-\section{An alternative perspective}
-
-\section{Conclusion: the end}
-
-\begin{frame}{Conclusions}
-\begin{block}{GIT and version control}
+\begin{frame}{\textbf{Preamble - Part 1}}
+	Consider a $d$-dimensional domain $\Omega$ and the following problem subjected to homogeneous Dirichlet boundary conditions: 
+	%\vspace{0.1cm}
+	\begin{columns}[c]
+		\begin{column}{0.5\textwidth}
+			% \vspace*{-\baselineskip}
+			\begin{framed}
+				Find a bmtor $\bm{u}$ and a scalar $p$ in $\Omega \rightarrow \mathbb{R}$ satisfying:
+				\begin{align*}
+					\nabla \cdot \bm{u} &= 0 \\
+					\partial_{t} \bm{u} + (\bm{u} \cdot \nabla) \bm{u} + \nabla p - \nu \Delta \bm{u} - \bm{f} &= 0
+					% \bm{u} &= 0 \ \textrm{ in } \partial\Omega
+					% \textrm{ in } \Omega
+				\end{align*}
+			\end{framed}
+		\end{column}
+		\begin{column}{0.4\textwidth}
+			\vspace*{-\baselineskip}
+			\begin{center}
+				\includegraphics[scale = 0.13]{images/domain_3d.png}
+			\end{center}
+		\end{column}
+	\end{columns}
+	
+	\vspace{0.4cm}
 	\begin{itemize}
-	\item Essential if you want to work as part of a team
-	\item Allows you to track every change and go back in time (e.g. git bissect)
-	\item Allows you to share your code with who you want in a safe and controllable way.
-	\end{itemize}
-\end{block}
-
-\begin{block}{You need to change the way you work}
-	\begin{itemize}
-	\item When you start a new feature, create a branch and work on it.
-	\item Aim for small features, once they are complete, merge them.
-	\item Don't be afraid of criticism, getting comments is a good way to get better.
-	\end{itemize}
-\end{block}
+		\item This is a coupled problem for velocity ($\bm{u}$) and pressure ($p$).
+		\item This is a non-linear problem due to the second term in the momentum equation.
+	\end{itemize}    
 \end{frame}
 
 
-\begin{frame}{Advices for the future}
+\begin{frame}
+	\frametitle{\textbf{Problem: Variational formulation}}
+	%\fontsize{10.5}{11}\selectfont
+	We multiply by the test functions $\bm{v}$ and $q$, and integrate over the domain using the notation $(a, b)_{\Omega} = \int a b \ \text{d}\Omega$:
+	\begin{align*}
+		\left( q, \nabla \cdot \bm{u} \right)_{\Omega} + (\bm{v}, \partial_t \bm{u} + (\bm{u} \cdot \nabla) \bm{u} + \underbrace{\nabla p}_{1} - \underbrace{\nu \Delta \bm{u}}_{2} - \bm{f} )_{\Omega} = 0
+	\end{align*}
+	We integrate by parts terms $1$ and $2$:
+	\begin{align*}
+		(\bm{v}, \nabla p)_{\Omega} = - (\nabla \cdot \bm{v}, p)_{\Omega} + ( \bm{n} \cdot \bm{v}, p)_{\partial\Omega} \\
+		(\bm{v}, -\nu \Delta \bm{u})_{\Omega} = \nu (\nabla \bm{v}, \nabla \bm{u})_{\Omega} - (\bm{v} \bm{n}, \nu \nabla \bm{u})_{\partial\Omega} 
+	\end{align*}
+	If we assume Dirichlet B.Cs or zero stress conditions on $\partial\Omega$:
+	\begin{align*}
+		( \bm{n} \cdot \bm{v}, p)_{\partial\Omega} - (\bm{v} \bm{n}, \nu \nabla \bm{u})_{\partial\Omega} = 0
+	\end{align*}
+	%which is an outlet boundary condition where the normal stress is zero. Approximately empose an outlet boundary condition with a zero average pressure.
+	Writing everything together we get the final weak form:
+	\begin{align*}
+		F(\bm{u}, p) := \left( q, \nabla \cdot \bm{u} \right)_{\Omega} + (\bm{v}, \partial_t \bm{u})  + {(\bm{v}, (\bm{u} \cdot \nabla) \bm{u})_{\Omega}} \\
+		- (\nabla \cdot \bm{v}, p)_{\Omega} + \nu (\nabla \bm{v}, \nabla \bm{u})_{\Omega} - (\bm{v}, \bm{f})_{\Omega}  = 0
+	\end{align*}
+	%\visible<2->{
+	%	\textcolor{maincolor}{$\longrightarrow$ due to the non linearity we use \textbf{Newton's method} to solve this problem.}}
+\end{frame}
 
-	\begin{block}{Above all things, using git requires discipline}
-		\begin{itemize}
-		\item If you can name an idea or a change, it should be a branch and a pull request.
-		\item Ensure you have ways to test your changes. Automating these tests is easier than you think (e.g. use continuous integration)
-		\item Write clear commit messages and pull request messages. It is a small time investment that can save you a lot of time and it structures your ideas.
-		\item Do not be afraid of failing or making mistake, git enables you to go back in time, so you CAN do large-scale refactoring.
-		\end{itemize}
-	\end{block}
 
-	\begin{block}{There is more to git...}
-		\begin{itemize}
-		\item Rebase
-		\item Cherry-picking
-		\item Squashing
-		\item ... (many other things I do not know)
-		\end{itemize}
-	\end{block}
+
+\begin{frame}{\textbf{A straightforward implementation}}
+	\[
+	\pp{q,\partial_t \varepsilon_{\mathrm{f}}}_\Omega + \pp{q, \varepsilon_{\mathrm{f}}\nabla \cdot \vm{u}}_\Omega + \pp{q, \vm{u} \nabla \varepsilon_{\mathrm{f}}}_\Omega + \underbrace{\pp{\tau_{\vm{u}} \nabla q, \vm{\mathcal{R}}^{\mathrm{VANS}}_{\mathrm{A},\mathrm{B}}}_{\Omega_e}}_{\mathrm{PSPG}} = 0
+	\]
+	\begin{align}
+	F^{\mathrm{VANS}}_{\mathrm{A}}\pp{\vm{u}, p, \varepsilon_{\mathrm{f}}} := &\notag \pp{\vm{w}, \varepsilon_{\mathrm{f}}\partial_t\vm{u} + \varepsilon_{\mathrm{f}}\vm{u} \cdot \nabla \vm{u}}_{\Omega} + \pp{\vm{w}, \nu \nabla \vm{u} \cdot \nabla{\varepsilon_{\mathrm{f}}}}_\Omega  \\ 
+	\notag &+ \pp{\nabla \vm{w}, \nu \varepsilon_{\mathrm{f}}\nabla \vm{u}}_{\Omega} - \pp{\nabla \cdot \vm{w}, p \varepsilon_{\mathrm{f}}}_\Omega - \pp{\vm{w}, p \nabla \varepsilon_{\mathrm{f}}}_\Omega  \\
+	\notag &+ \pp{\vm{w}, \frac{\bar{\vm{f}}_\mathrm{A}^{\mathrm{pf}}}{V_\Omega}}_\Omega + \underbrace{\pp{\tau_{\vm{u}} \vm{u} \cdot \nabla \vm{w}, \vm{\mathcal{R}}^{\mathrm{VANS}}}_{\Omega_e}}_{\mathrm{SUPG}} \\
+	 &+ \underbrace{\pp{\gamma \nabla \cdot \vm {w}, \partial_t \varepsilon_{\mathrm{f}}+ \nabla \cdot \pp{\varepsilon_{\mathrm{f}}\vm{u}}}_{\Omega_e}}_{\mathrm{grad-div}} = 0
+	 \end{align}
 
 \end{frame}
+
+\section{Another approach}
+\section{Conclusion}
+
+\begin{frame}{\textbf{Conclusion}}
+\begin{block}{Summary}
+	\begin{itemize}
+		\item The VANS equations are used to model flows with spatially and temporally varying void fraction.
+		\item They are derived from the Navier-Stokes equations using volume averaging.
+		\item By themselves, they are challenging to solve using the finite element method.
+	\end{itemize}
+\end{block}
+\begin{block}{Topics I did not discuss}
+	\begin{itemize}
+		\item Defining the void fraction from Lagrangian particles.
+		\item Force term that arise due to the interaction of the fluid with the particles.
+	\end{itemize}
+\end{block}
+\textbf{Remember that the VANS equations are physical equations and, consequently, should not be correlated with the numerical discretization.}
+\end{frame}
+
+\begin{frame}{\textbf{bibliography}}
+	\bibliographystyle{plain}
+	\bibliography{bibliography}
+\end{frame}
+
 
 \end{document}
