@@ -420,12 +420,17 @@ The last term is our traditional PSPG term to enable the use of equal-order inte
 \begin{frame}{On the need for stabilization }
 \end{frame}
 
-\begin{frame}{A test case }
+\begin{frame}{A test case}
 
-	We consider the following test case:
+	We consider the following 1D flow for ($x\in[-1,1]$):
 	\begin{align}
-	\varepsilon(z) = 
+	\varepsilon(x) = 0.5-0.25\tanh (40*x)
 	\end{align}
+Essentially this mimics a smooth step-function for the void fraction. The analytical solution for the velocity is:
+\begin{align}
+u(x) = \frac{1}{\varepsilon}
+\end{align}
+
 \end{frame}
 
 
