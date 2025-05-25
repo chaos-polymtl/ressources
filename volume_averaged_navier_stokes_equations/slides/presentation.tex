@@ -217,16 +217,14 @@
 \partial_t \epsilon + \partial_i (\epsilon u_i) = 0
 \]
 \end{block}
-
 \begin{block}{Momentum conservation:}
 	\[
 	\partial_t \left(\epsilon u_i\right) + \partial_j (\epsilon u_i u_j) = \frac{\epsilon}{\rho} \partial_i p + \partial_j \left(\epsilon \tau_{ij}\right) + \epsilon g_i
 	\]
 	\end{block}
-
 	with:
 	\begin{itemize}
-	\item $\epsilon$ the void fraction
+	\item $\varepsilon$ the void fraction
 	\item $u_i$ the velocity
 	\item $\rho$ the density
 	\item $p$ the pressure
@@ -340,17 +338,17 @@ These kind of demonstration is something we take for granted, but it is not triv
 
 \section{A straightforward implementation}
 
-\begin{frame}{\textbf{Preamble - Part 1}}
+\begin{frame}{\textbf{Preamble: Problem definition for Navier-Stokes}}
 	Consider a $d$-dimensional domain $\Omega$ and the following problem subjected to homogeneous Dirichlet boundary conditions: 
 	%\vspace{0.1cm}
 	\begin{columns}[c]
 		\begin{column}{0.5\textwidth}
 			% \vspace*{-\baselineskip}
 			\begin{framed}
-				Find a bmtor $\bm{u}$ and a scalar $p$ in $\Omega \rightarrow \mathbb{R}$ satisfying:
+				Find a vector ${u}_i$ and a scalar $p$ in $\Omega \rightarrow \mathbb{R}$ satisfying:
 				\begin{align*}
-					\nabla \cdot \bm{u} &= 0 \\
-					\partial_{t} \bm{u} + (\bm{u} \cdot \nabla) \bm{u} + \nabla p - \nu \Delta \bm{u} - \bm{f} &= 0
+					\partial_i u_i &= 0 \\
+					\partial_{t} {u}_i + ({u}_j \partial_j ) u_i + \partial_i p - \nu \partial_j \partial_j {u}_i &= 0
 					% \bm{u} &= 0 \ \textrm{ in } \partial\Omega
 					% \textrm{ in } \Omega
 				\end{align*}
@@ -366,14 +364,14 @@ These kind of demonstration is something we take for granted, but it is not triv
 	
 	\vspace{0.4cm}
 	\begin{itemize}
-		\item This is a coupled problem for velocity ($\bm{u}$) and pressure ($p$).
+		\item This is a coupled problem for velocity (${u}_i$) and pressure ($p$).
 		\item This is a non-linear problem due to the second term in the momentum equation.
 	\end{itemize}    
 \end{frame}
 
 
 \begin{frame}
-	\frametitle{\textbf{Problem: Variational formulation}}
+	\frametitle{\textbf{Premable: Variational formulation}}
 	%\fontsize{10.5}{11}\selectfont
 	We multiply by the test functions $v_i$ and $q$, and integrate over the domain using the notation $(a, b)_{\Omega} = \int a b \ \text{d}\Omega$:
 	\begin{align*}
@@ -381,8 +379,8 @@ These kind of demonstration is something we take for granted, but it is not triv
 	\end{align*}
 	We integrate by parts terms $1$ and $2$:
 	\begin{align*}
-		({v}_i, \partial_i p)_{\Omega} = - (\partial_i  {v}_i, p)_{\Omega} + ( n_i  {v}_i, p)_{\partial\Omega} \\
-		({v}_i, -\nu \partial_j \partial_j {u}_i)_{\Omega} = \nu (\partial_i {v}_j,  \partial_i {u}_j)_{\Omega} - (n_i {v}_j, \nu \partial_i {u}_j)_{\partial\Omega} 
+		({v}_i, \partial_i p)_{\Omega} &= - (\partial_i  {v}_i, p)_{\Omega} + ( n_i  {v}_i, p)_{\partial\Omega} \\
+		({v}_i, -\nu \partial_j \partial_j {u}_i)_{\Omega} &= \nu (\partial_i {v}_j,  \partial_i {u}_j)_{\Omega} - (n_i {v}_j, \nu \partial_i {u}_j)_{\partial\Omega} 
 	\end{align*}
 	If we assume Dirichlet B.Cs or zero stress conditions on $\partial\Omega$:
 	\begin{align*}
@@ -391,8 +389,8 @@ These kind of demonstration is something we take for granted, but it is not triv
 	%which is an outlet boundary condition where the normal stress is zero. Approximately empose an outlet boundary condition with a zero average pressure.
 	Writing everything together we get the final weak form:
 	\begin{align*}
-		F({u}_i, p) := \left( q, \nabla \cdot \bm{u} \right)_{\Omega} + (\bm{v}, \partial_t \bm{u})  + {(\bm{v}, (\bm{u} \cdot \nabla) \bm{u})_{\Omega}} \\
-		- (\nabla \cdot \bm{v}, p)_{\Omega} + \nu (\nabla \bm{v}, \nabla \bm{u})_{\Omega} - (\bm{v}, \bm{f})_{\Omega}  = 0
+		F({u}_i, p) := \left( q, \partial {u}_i \right)_{\Omega} + (v_i, \partial_t {u}_i)  + {({v}_i, ({u}_j \partial_j) {u}_i)_{\Omega}} 
+		- (\partial_i  {v}_i, p)_{\Omega} + \nu (\partial_i {v}_j, \partial_i {u}_j)_{\Omega}  = 0
 	\end{align*}
 	%\visible<2->{
 	%	\textcolor{maincolor}{$\longrightarrow$ due to the non linearity we use \textbf{Newton's method} to solve this problem.}}
@@ -400,7 +398,7 @@ These kind of demonstration is something we take for granted, but it is not triv
 
 
 
-\begin{frame}{\textbf{A straightforward implementation}}
+\begin{frame}{\textbf{VANS: Mass conservation}}
 For mass conservation, we have:
 \begin{align*}
 \partial_t \epsilon + \partial_i (\epsilon u_i) = 0
@@ -415,6 +413,8 @@ The last term is our traditional PSPG term to enable the use of equal-order inte
 	\mathcal{R}_{i} &= \varepsilon \partial_t u_i + \varepsilon {u_j} \partial_j \cdot {u_i} 
 	+ \frac{1}{\rho} \bra{\varepsilon \partial_i p - \nu \varepsilon \partial_j \partial_j {u_i} + \partial_i {u_j} \partial_j \varepsilon}
 \end{align*}
+\end{frame}
+\begin{frame}{\textbf{VANS: Momentum conservation}}
 \end{frame}
 
 \section{Another approach}
