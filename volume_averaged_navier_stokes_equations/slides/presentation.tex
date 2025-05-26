@@ -441,37 +441,28 @@ u(x) = \frac{1}{\varepsilon}
 \begin{frame}{\textbf{Volume-Averaged Navier-Stokes (VANS) equations}}
 	\visible<1->
 	{\begin{shaded}
-			 Berend: It is actually more stable if you use the superficial velocity instead... 
+			 \textbf{Berend}: It is actually more stable if you use the superficial velocity instead... 
 	\end{shaded}}
-	
-	\begin{minipage}[t]{0.48\linewidth}
-		%\visible<2->
-		{
-			\begin{block}{Superficial velocity formulation:}
-				\begin{itemize}
-					\item We replace the velocity $u_i$ by the superficial velocity $\bar{u}_i =  \varepsilon u_i$.
-					\item Unresolved CFD-DEM
-					\item Porous media flow
-				\end{itemize}
-			\end{block}
-		}
-	\end{minipage}%
-	\hfill%
-	%
-	\begin{minipage}[t]{0.48\linewidth}
-		%\visible<3->
-		{
-			\begin{block}{For many applications:}
-				\begin{itemize}
-					\item Fluidized and spouted-bed reactors
-					\item Free surface flows in containers
-					\item DNS of particle-laden flow
-					\item Mixing in stirred tanks 
-					\item Flow in porous media
-				\end{itemize}
-			\end{block}
-		}
-	\end{minipage}
+
+			\vspace{0.5cm}
+			\begin{columns}[c]
+				\begin{column}{0.58\textwidth}
+					\begin{block}{Superficial velocity formulation:}
+						\begin{itemize}
+							\item We replace the velocity $u_i$ by the superficial velocity $\bar{u}_i =  \varepsilon u_i$.
+							\item Sudden change in the void fraction $\varepsilon$ don't lead to sudden change in the superficial velocity $\bar{u}_i$.
+							\item Stress tensor terms are going to be modified. 
+						\end{itemize}
+					\end{block}
+					\end{column}
+				\begin{column}{0.4\textwidth}
+					\vspace*{-\baselineskip}
+					\begin{center}
+						\includegraphics[width=0.8\linewidth]{images/person.png}
+					\end{center}
+				\end{column}
+			\end{columns}
+
 \end{frame}
 
 \section{Conclusion}
