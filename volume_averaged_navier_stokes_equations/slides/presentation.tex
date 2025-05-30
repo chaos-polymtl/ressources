@@ -177,7 +177,7 @@
 \begin{frame}{\textbf{Volume-Averaged Navier-Stokes (VANS) equations}}
 	\visible<1->
 	{\begin{shaded}
-			The \textbf{Volume-Averaged Navier-Stokes} are used to simulate flows with spatially ($\bm{x}$) and temporally ($t$) varying void fraction ($\epsilon$)
+			The \textbf{Volume-Averaged Navier-Stokes} are used to simulate flows with spatially ($\bm{x}$) and temporally ($t$) varying void fraction ($\varepsilon$)
 	\end{shaded}}
 	
 	\begin{minipage}[t]{0.48\linewidth}
@@ -313,8 +313,8 @@ This means that $u_z$ is:
 \begin{frame}
 \frametitle{\textbf{Origin of the VANS equations}}
 \begin{block}{Reference}
-There are many ways to derive the VANS equations, but they all rely on the same idea: \textbf{volume averaging}. Here I will follow Anderson \& Jackson's approach %\cite{anderson_fluid_1967}
-. However, alternative/similar demonstration exist notably in the book by Balachandar %\cite{balachandar2024fundamentals}
+There are many ways to derive the VANS equations, but they all rely on the same idea: \textbf{volume averaging}. Here I will follow Anderson \& Jackson's approach. %\cite{anderson_fluid_1967}.
+ However, alternative/similar demonstration exist notably in the book by Balachandar %\cite{balachandar2024fundamentals}
  Crowe \textit{et al.} %\cite{crowe1998multiphase}
  Prosperetti and Tryggvason %\cite{prosperetti2009computational
   etc.
@@ -367,7 +367,7 @@ And we normalize $g(r)$ such that:
 \textbf{$g(r)$ is a weighting function:} It is used to form local averages of system point variables.
 			\end{shaded}}
 
-In practice, this function will have a compat support. We will speak of the radius $r_0$ of the weighting function as:
+In practice, this function will have a compact support. We will speak of the radius $r_0$ of the weighting function as:
 \[
 4\pi \int_0^{r_0} g(r) r^2 \mathrm{d}r = 4\pi \int_{r_0}^{\infty} g(r) r^2 \mathrm{d}r = \frac{1}{2}
 \]
@@ -394,7 +394,7 @@ where $V_{f,\infty}$ indicates that the integral is taken over all points $y_i$ 
 
 \begin{frame}{\textbf{Particle density}}
 
-Let $V_p$ be the volume of one particle. All particles are assumed to be identical. The local mean particle density (number of particles per unit volume) is:
+Let $V_p$ be the volume of one particle. All particles are assumed to be identical. The local mean particle density (number of particles per unit volume, $n_p(x_i,t)$) is:
 \begin{align*}
 V_p n_p(x_i,t) &= 1 - \varepsilon(x_i,t) \\
                &= 1 - \int_{V_{f,\infty}} g(|x_i-y_i|) \mathrm{d}V_y \\
@@ -408,19 +408,188 @@ V_{s,\infty} = V_\infty  - V_{f,\infty}
 \end{frame}
 
 
-\begin{frame}{\textbf{Some notes about this averaging}}
+\begin{frame}{\textbf{Local mean values}}
+Let $a'(x_i,t)$ be a pointwise variable (e.g. velocity, pressure, etc.). The local mean value of $a'$, $a$, is defined as:
+\[
+\varepsilon(x_i,t) a(x_i,t) = \int_{V_{f,\infty}} g(|x_i-y_i|) a'(y_i,t) \mathrm{d}V_y
+\]
 
+\visible<2->
+{
+\textbf{An issue: }The average is not unique, it depends on the weighting function $g(r)$.
+}
+
+\visible<3->
+{
+\textbf{In practice: } Spatial variation is the sum of two contributions:
+\begin{itemize}
+	\item One at a scale comparable with the particle spacing
+	\item Larger scale, closer to that of the system
+\end{itemize}
+}
+\visible<4->
+{
+	\textbf{If the scale is large enough, local mean variable should become unambiguous.}
+}
 \end{frame}
 
-\begin{frame}{\textbf{Mass conservation}}
+\begin{frame}{\textbf{Mean and perturbation}}
+Using this definition, we can write the local mean value of a pointwise variable $a'$ as:
+\[
+a'(x_i,t) = a(x_i,t) + a''(x_i,t)
+\]
+where $a''(x_i,t)$ is the perturbation of the local mean value (analogous to the fluctuation in turbulence).
+\end{frame}
 
+
+\begin{frame}{\textbf{Derivatives}}
+	
+	{\begin{shaded}
+	In order to construct PDE for the local mean values, we need to define the derivatives of the local mean values.
+	\end{shaded}}
+
+	Let $a'$ be a pointwise variable and $a$ its local mean value. Then:
+	\[
+	\frac{\partial \pp{\varepsilon a}}{\partial x_k} = \int_{V_{f,\infty}} g(|x_i-y_i|) \frac{\partial a'(y_i,t)}{\partial y_k} \mathrm{d}V_y - \int_{S_f} n_p a'(y_i,t) g(|x_i-y_i|) \mathrm{d}S_y
+	\]
+
+	\visible<2->
+	{
+	\textbf{Wait... Wut?}
+	}
+\end{frame}
+
+\begin{frame}{\textbf{Moar details needed}}
+Starting from the definition of the local mean value, we can write:
+\[
+\frac{\partial}{\partial x_k} \int_{V_{f,\infty}} g(|x_i-y_i|) a'(y_i,t) \mathrm{d}V_y = \int_{V_{f,\infty}} \frac{\partial}{\partial x_k} \pp{g(|x_i-y_i|)} a'(y_i,t) \mathrm{d}V_y 
+\]
+
+\visible<2->
+{
+	A first trick: 
+	\[
+	\frac{\partial }{\partial x_k} g(|x_i-y_i|) = - 	\frac{\partial }{\partial y_k} g(|x_i-y_i|)
+	\]
+	So now we have:
+	\[
+\int_{V_{f,\infty}} \frac{\partial}{\partial x_k} \pp{g(|x_i-y_i|)} a'(y_i,t) \mathrm{d}V_y  =\int_{V_{f,\infty}} -\frac{\partial} {\partial y_k} \pp{g(|x_i-y_i|)} a'(y_i,t) \mathrm{d}V_y 	
+\]
+}
+\end{frame}
+\begin{frame}{\textbf{Here comes the Gauss-Ostrogradsky train}}
+\begin{align*}
+\int_{V_{f,\infty}} -\frac{\partial}{\partial y_k} \pp{g(|x_i-y_i|)} a'(y_i,t) \mathrm{d}V_y 	= &\int_{V_{f,\infty}}  \pp{g(|x_i-y_i|)} \frac{\partial}{\partial y_k}\pp{a'(y_i,t)} \mathrm{d}V_y \\ &- \int_{S_f} n_p a'(y_i,t) g(|x_i-y_i|) \mathrm{d}S_y
+\end{align*}
+And so we get:
+\[
+	\frac{\partial \pp{\varepsilon a}}{\partial x_k} = \int_{V_{f,\infty}} g(|x_i-y_i|) \frac{\partial a'(y_i,t)}{\partial y_k} \mathrm{d}V_y - \int_{S_f} n_k a'(y_i,t) g(|x_i-y_i|) \mathrm{d}S_y
+\]
+\end{frame}
+
+\begin{frame}{\textbf{What is this surface?}}
+The surface $S_f$ is the surface bounding fluid phase. In practice, it is made of disjoint parts (the surface of the fluid domain and the sum of the surfaces of the particles). Consequently:
+\begin{align*}
+\int_{S_f} n_p a'(y_i,t) g(|x_i-y_i|) \mathrm{d}S_y =  &\int_{S_{f,\infty}} n_p a'(y_i,t) g(|x_i-y_i|) \mathrm{d}S_y \\
+&+ \sum_{p=1}^{N_p} \int_{S_{p}} n_k a'(y_i,t) g(|x_i-y_i|) \mathrm{d}S_y
+\end{align*}
+
+We will reverse the unit normal vector $n_k$ to point from the particles to the fluid:
+\begin{align*}
+\int_{S_f} n_p a'(y_i,t) g(|x_i-y_i|) \mathrm{d}S_y =  &\int_{S_{f,\infty}} n_p a'(y_i,t) g(|x_i-y_i|) \mathrm{d}S_y \\
+&- \sum_{p=1}^{N_p} \int_{S_{p}} n_k^{-} a'(y_i,t) g(|x_i-y_i|) \mathrm{d}S_y
+\end{align*}
+\end{frame}
+
+\begin{frame}{\textbf{Final result for the derivative}}
+For the spatial derivative, we have:
+\begin{align*}
+		\int_{V_{f,\infty}} g(|x_i-y_i|) \frac{\partial a'(y_i,t)}{\partial y_k} \mathrm{d}V_y   = \frac{\partial \pp{\varepsilon a}}{\partial x_k} - \sum_{p=1}^{N_p} \int_{S_{p}} n_k^{-} a'(y_i,t) g(|x_i-y_i|) \mathrm{d}S_y 
+\end{align*}
+A similar result is obtained for time derivative:
+\begin{align*}
+		\int_{V_{f,\infty}} g(|x_i-y_i|) \frac{\partial a'(y_i,t)}{\partial t} \mathrm{d}V_y   = \frac{\partial \pp{\varepsilon a}}{\partial t} +\sum_{p=1}^{N_p} \int_{S_{p}} n_k^{-} v'_k a'(y_i,t) g(|x_i-y_i|) \mathrm{d}S_y 
+\end{align*}
+
+$v'_{k}$ is the velocity of the solid matter (particles) at the surface $S_p$ of particle $p$.
+\end{frame}
+
+
+\begin{frame}{\textbf{Mass conservation}}
+With these definitions, we can now write the mass conservation equation. If the fluid phase is incompressible, then:
+\begin{align*}
+\partial_k u'_k = 0 
+\end{align*}
+We multiply by the weighting function $g(|x_i-y_i|)$ and integrate over the fluid phase:
+\begin{align*}
+\int_{V_{f,\infty}} g(|x_i-y_i|) \partial_k u'_k \mathrm{d}V_y = 0
+\end{align*}
+Using our previous result for spatial derivative, we have:
+\begin{align*}
+\partial_k \pp{\varepsilon u_k} = \sum_{p=1}^{N_p} \int_{S_{p}} n_k^{-} u'_k g(|x_i-y_i|) \mathrm{d}S_y 
+\end{align*}
+\end{frame}
+
+\begin{frame}{\textbf{Number conservation}}
+Setting $a'=1$, the conservation of unity, we can obtain:
+\begin{align*}
+\partial_t \varepsilon = - \sum_{p=1}^{N_p} \int_{S_{p}} n_k^{-} v'_k g(|x_i-y_i|) \mathrm{d}S_y
+\end{align*}
+
+At the surface of the particles, the velocity of the solid $v'_k$ is equal to the velocity of the fluid $u'_k$. Thus, we can write:
+\begin{align*}
+\partial_t \varepsilon = - \sum_{p=1}^{N_p} \int_{S_{p}} n_k^{-} u'_k g(|x_i-y_i|) \mathrm{d}S_y
+\end{align*}
+\end{frame}
+
+\begin{frame}{\textbf{Back to mass again Yo!}}
+\begin{align*}
+\partial_t \varepsilon = - \sum_{p=1}^{N_p} \int_{S_{p}} n_k^{-} u'_k g(|x_i-y_i|) \mathrm{d}S_y
+\end{align*}
+Combined with:
+\begin{align*}
+\partial_k \pp{\varepsilon u_k} = \sum_{p=1}^{N_p} \int_{S_{p}} n_k^{-} u'_k g(|x_i-y_i|) \mathrm{d}S_y 
+\end{align*}
+Gives me:
+\begin{align*}
+\partial_t \varepsilon + \partial_k \pp{\varepsilon u_k} = 0
+\end{align*}
+This is the mass conservation equation for the VANS equations. It is a continuity equation that describes how the void fraction $\varepsilon$ changes in time and space due to the flow of the fluid.
 \end{frame}
 
 \begin{frame}{\textbf{Momentum conservation}}
 
-A similar approach can be used to derive the momentum conservation equation. The result is:
+A similar approach can be used to derive the momentum conservation equation. In the interest of time\footnote{Maybe my next presentation?} I only provide the final result:
+\begin{align*}
+\partial_t \pp{\varepsilon u_i} + \partial_k \pp{\varepsilon u_k u_i} = \frac{\varepsilon}{\rho} \partial_i p + \partial_j \left(\epsilon \tau_{ij}\right) + \epsilon g_i
+\end{align*}
+
+The demonstration required to reach that point is quite long and involves the use of the Reynolds transport theorem, the definition of the local mean value, and the Gauss-Ostrogradsky theorem.
+
+\visible<2->
+{
+	\textbf{Note: } The justification for the $ \frac{\varepsilon}{\rho} \partial_i p $ is quite tricky...
+}
+\end{frame}
 
 
+\section{Conclusion}
+\begin{frame}{\textbf{Conclusion}}
+\begin{block}{Summary}
+	\begin{itemize}
+		\item The VANS equations are used to model flows with spatially and temporally varying void fraction.
+		\item They are derived from the Navier-Stokes equations using volume averaging.
+		\item By themselves, they are challenging to solve using the finite element method (for this you will have to trust me).
+	\end{itemize}
+\end{block}
+\begin{block}{Topics I did not discuss}
+	\begin{itemize}
+		\item The actual implementation of the VANS equations in a finite element code.
+		\item How I am actually re-implementing them right now.
+		\item Defining the void fraction from Lagrangian particles.
+		\item Force term that arise due to the interaction of the fluid with the particles.
+	\end{itemize}
+\end{block}
 \end{frame}
 
 
@@ -480,7 +649,7 @@ A similar approach can be used to derive the momentum conservation equation. The
 		F({u}_i, p) := \left( q, \partial {u}_i \right)_{\Omega} + (v_i, \partial_t {u}_i)  + {({v}_i, ({u}_j \partial_j) {u}_i)_{\Omega}} 
 		- (\partial_i  {v}_i, p)_{\Omega} + \nu (\partial_i {v}_j, \partial_i {u}_j)_{\Omega}  = 0
 	\end{align*}
-	%\visible<2->{
+	%\vhisible<2->{
 	%	\textcolor{maincolor}{$\longrightarrow$ due to the non linearity we use \textbf{Newton's method} to solve this problem.}}
 \end{frame}
 
@@ -553,24 +722,8 @@ u(x) = \frac{1}{\varepsilon}
 
 \end{frame}
 
-\section{Conclusion}
 
-\begin{frame}{\textbf{Conclusion}}
-\begin{block}{Summary}
-	\begin{itemize}
-		\item The VANS equations are used to model flows with spatially and temporally varying void fraction.
-		\item They are derived from the Navier-Stokes equations using volume averaging.
-		\item By themselves, they are challenging to solve using the finite element method.
-	\end{itemize}
-\end{block}
-\begin{block}{Topics I did not discuss}
-	\begin{itemize}
-		\item Defining the void fraction from Lagrangian particles.
-		\item Force term that arise due to the interaction of the fluid with the particles.
-	\end{itemize}
-\end{block}
-\textbf{Remember that the VANS equations are physical equations and, consequently, should not be correlated with the numerical discretization.}
-\end{frame}
+
 
 \begin{frame}{\textbf{bibliography}}
 	\bibliographystyle{plain}
