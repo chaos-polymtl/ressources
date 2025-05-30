@@ -222,7 +222,6 @@
 	\partial_t \left(\epsilon u_i\right) + \partial_j (\epsilon u_i u_j) = \frac{\epsilon}{\rho} \partial_i p + \partial_j \left(\epsilon \tau_{ij}\right) + \epsilon g_i
 	\]
 	\end{block}
-	with:
 	\begin{itemize}
 	\item $\varepsilon$ the void fraction
 	\item $u_i$ the velocity
@@ -325,6 +324,88 @@ These kind of demonstration is something we take for granted, but it is not triv
 
 \begin{frame}{\textbf{Volume averaging}}
 
+	{\begin{shaded}
+\textbf{Main idea:} Replace the pointwise mechanical variables (velocity, pressure, etc.) by local mean variables obtained by point variables over region which contain many particles, but are still small compared with the scale of \textit{macroscopic} variation from point to point in the system.
+	\end{shaded}}
+
+\textbf{Obviously this is very vague, let's try to be more precise.}
+
+\end{frame}
+
+\begin{frame}{\textbf{Volume averaging}}
+Let $g(r)$ be a function defined for $r>0$ with the following properties:
+\begin{itemize}
+	\item $g(r)>0\; \forall\; r$
+	\item $g(r)$ decreases monotonically with $r$
+	\item $g(r)$ possess derivatives $g^{n}(r)$ of all orders for each value of $r$
+	\item $\int_{V_\infty} g^{n}(r) \mathrm{d}V$ exists for all values of $n$. $V_\infty$ is the entire volume of the system. 
+	\item \textbf{Theoretically it should have a compact support, i.e. $g(r)=0$ for $r>R$ where $R$ is a finite radius.}
+\end{itemize}
+
+From there:
+\[
+\int_{V_\infty} g(r) \mathrm{d}V = \int_0^{\infty} g(r) r^2 \mathrm{d}r 
+\]
+
+And we normalize $g(r)$ such that:
+\[
+\int_{V_\infty} g(r) \mathrm{d}V = 1
+\]
+
+\textbf{$g(r)$ is a weighting function} 
+
+\end{frame}
+
+
+\begin{frame}{\textbf{Volume averaging}}
+
+	{\begin{shaded}
+\textbf{$g(r)$ is a weighting function:} It is used to form local averages of system point variables.
+			\end{shaded}}
+
+In practice, this function will have a compat support. We will speak of the radius $r_0$ of the weighting function as:
+\[
+4\pi \int_0^{r_0} g(r) r^2 \mathrm{d}r = 4\pi \int_{r_0}^{\infty} g(r) r^2 \mathrm{d}r = \frac{1}{2}
+\]
+
+\textbf{Note: } This radius is not a \textit{physical} radius, but rather a measure of the size of the region over which we average. 
+	
+\end{frame}
+
+
+
+\begin{frame}{\textbf{Void fraction definition}}
+	
+	{\begin{shaded}
+	Using the weighting function $g(r)$, we can define the void fraction $\varepsilon$.
+	\end{shaded}}
+
+	\[
+\varepsilon(x_i,t) = \int_{V_{f,\infty}} g(|x_i-y_i|) \mathrm{d}V_y
+	\]
+where $V_{f,\infty}$ indicates that the integral is taken over all points $y_i$ occupied by the fluid at time $t$. 
+
+\end{frame}
+
+
+\begin{frame}{\textbf{Particle density}}
+
+Let $V_p$ be the volume of one particle. All particles are assumed to be identical. The local mean particle density (number of particles per unit volume) is:
+\begin{align*}
+V_p n_p(x_i,t) &= 1 - \varepsilon(x_i,t) \\
+               &= 1 - \int_{V_{f,\infty}} g(|x_i-y_i|) \mathrm{d}V_y \\
+							 &= \int_{V_{\infty}} g(|x_i-y_i|) \mathrm{d}V_y - \int_{V_{f,\infty}} g(|x_i-y_i|) \mathrm{d}V_y 
+\end{align*}
+
+If we denote $V_{s,\infty}$ as the set of all points occupied by the solid phase (points inside the particles), we can write:
+\begin{align*}
+V_{s,\infty} = V_\infty  - V_{f,\infty}
+\end{align*}
+\end{frame}
+
+
+\begin{frame}{\textbf{Some notes about this averaging}}
+
 \end{frame}
 
 \begin{frame}{\textbf{Mass conservation}}
@@ -332,6 +413,9 @@ These kind of demonstration is something we take for granted, but it is not triv
 \end{frame}
 
 \begin{frame}{\textbf{Momentum conservation}}
+
+A similar approach can be used to derive the momentum conservation equation. The result is:
+
 
 \end{frame}
 
