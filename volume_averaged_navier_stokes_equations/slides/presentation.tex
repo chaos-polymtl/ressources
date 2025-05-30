@@ -122,7 +122,7 @@
 
 \title{\textbf{Volume-Averaged Navier-Stokes Equations}}
 \subtitle{A not so short introduction to the theory and application}
-\author{Bruno \textit{problembär} Blais}
+\author{Bruno Blais}
 
 
 % Logo of the laboratory and the university
@@ -214,12 +214,12 @@
 \begin{frame}{\textbf{VANS equations}}
 \begin{block}{Mass conservation:}
 \[
-\partial_t \epsilon + \partial_i (\epsilon u_i) = 0
+\partial_t \varepsilon + \partial_i (\varepsilon u_i) = 0
 \]
 \end{block}
 \begin{block}{Momentum conservation:}
 	\[
-	\partial_t \left(\epsilon u_i\right) + \partial_j (\epsilon u_i u_j) = \frac{\epsilon}{\rho} \partial_i p + \partial_j \left(\epsilon \tau_{ij}\right) + \epsilon g_i
+	\partial_t \left(\varepsilon u_i\right) + \partial_j (\varepsilon u_i u_j) = \frac{\varepsilon}{\rho} \partial_i p + \partial_j \left(\epsilon \tau_{ij}\right) + \epsilon g_i
 	\]
 	\end{block}
 	\begin{itemize}
@@ -258,9 +258,9 @@
 \begin{frame}
 	\frametitle{\textbf{A simplified representation of this problem}}
 	
-Without loss of generality, let's assume steady state and $\epsilon=\epsilon(z)$ such that:
+Without loss of generality, let's assume steady state and $\varepsilon=\varepsilon(z)$ such that:
 \[
-\epsilon(z) = \begin{cases}
+\varepsilon(z) = \begin{cases}
 	1 & \text{if } z < z_0 \\
 	0.5 & \text{if } z \in[z_0, z_1] \\
 	1 & \text{if } z > z_1
@@ -268,15 +268,15 @@ Without loss of generality, let's assume steady state and $\epsilon=\epsilon(z)$
 \]
 And that the velocity at the inlet is uniform in the $xy$ plane and constant ($u$). Then, from mass conservation, we have:
 \[
-\partial_t \epsilon + \partial_z (\epsilon u_z) = 0
+\partial_t \varepsilon + \partial_z (\varepsilon u_z) = 0
 \]
-Since we are in steady state, we have $\partial_t \epsilon = 0$, and thus:
+Since we are in steady state, we have $\partial_t \varepsilon = 0$, and thus:
 \[
-\partial_z (\epsilon u_z) = 0
+\partial_z (\varepsilon u_z) = 0
 \]
 This means that $u_z$ is:
 \[
-	\epsilon(z) = \begin{cases}
+	\varepsilon(z) = \begin{cases}
 		u & \text{if } z < z_0 \\
 		2u & \text{if } z \in[z_0, z_1] \\
 		u & \text{if } z > z_1
@@ -291,7 +291,7 @@ This means that $u_z$ is:
 		%\vspace{0.1cm}
 		\begin{columns}[c]
 			\begin{column}{0.3\textwidth}
-				Variation of $\epsilon$ create:
+				Variation of $\varepsilon$ create:
 				\begin{itemize}
 					\item Acceleration and/or deceleration of the fluid
 					\item \textbf{Should it generate stresses?}
@@ -313,7 +313,11 @@ This means that $u_z$ is:
 \begin{frame}
 \frametitle{\textbf{Origin of the VANS equations}}
 \begin{block}{Reference}
-There are many ways to derive the VANS equations, but they all rely on the same idea: \textbf{volume averaging}. Here I will follow Anderson \& Jackson's approach \cite{anderson_fluid_1967}. However, alternative/similar demonstration exist notably in the book by Balachandar \cite{balachandar2024fundamentals} Crowe \textit{et al.} \cite{crowe1998multiphase} Prosperetti and Tryggvason \cite{prosperetti2009computational} etc.
+There are many ways to derive the VANS equations, but they all rely on the same idea: \textbf{volume averaging}. Here I will follow Anderson \& Jackson's approach %\cite{anderson_fluid_1967}
+. However, alternative/similar demonstration exist notably in the book by Balachandar %\cite{balachandar2024fundamentals}
+ Crowe \textit{et al.} %\cite{crowe1998multiphase}
+ Prosperetti and Tryggvason %\cite{prosperetti2009computational
+  etc.
 \end{block}
 
 \begin{block}{Small Warning}
